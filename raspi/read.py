@@ -1,6 +1,5 @@
 from time import sleep
 from smbus2 import SMBus
-import numpy
 
 from note_player import NotePlayer
 
@@ -15,9 +14,9 @@ SIGNAL_THRESHOLD = 50
 DRUM_BEAT_NOTES = [60, 62, 64, 65]
 
 
-noghteybois = [NotePlayer(channel=c, port='Circuit MIDI 1') for c in range(4)]
-for baby in noghteybois:
-    baby.reset()
+# noghteybois = [NotePlayer(channel=c, port='Circuit MIDI 1') for c in range(4)]
+# for baby in noghteybois:
+#     baby.reset()
 
 
 while True:
@@ -37,11 +36,11 @@ while True:
             print("----------------")
             print(idx)
             print(sensor_value)
-            if idx > 1:
-                if value_difference < 0:
-                    noghteybois[2].play_note(DRUM_BEAT_NOTES[idx - 2], velocity=int(sensor_value / 10))
-            else:
-                noghteybois[idx].play_note(int(sensor_value / 20), velocity=64)
+            # if idx > 1:
+            #     if value_difference < 0:
+            #         noghteybois[2].play_note(DRUM_BEAT_NOTES[idx - 2], velocity=int(sensor_value / 10))
+            # else:
+            #     noghteybois[idx].play_note(int(sensor_value / 20), velocity=64)
 
     last_sounds = sensor_values.copy()
 
