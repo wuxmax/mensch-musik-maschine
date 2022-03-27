@@ -1,0 +1,16 @@
+matrix_shape: 
+  horizontal: 5
+  vertical: 1
+modules:
+  keyboard:
+    module: Keyboard
+    setup:
+      name: keyboard1
+      top: 0
+      left: 0
+      bottom: 1
+      right: 5
+    sound:
+      threshold: 50
+      note_mapping: chromatic # blues dur moll
+      root_note: C
