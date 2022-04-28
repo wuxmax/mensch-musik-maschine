@@ -1,12 +1,8 @@
-import yaml
 import numpy as np
 
 from matrix_processor import MatrixProcessor
-from utils import load_config
 
 CONFIG_FILE = "config.yml"
-
-config = load_config(CONFIG_FILE)
 
 matpro = MatrixProcessor(CONFIG_FILE)
 
