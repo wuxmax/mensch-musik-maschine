@@ -14,3 +14,4 @@ modules:
       threshold: 50
       note_mapping: chromatic # blues dur moll
       root_note: C
+log_file: 'log.txt'

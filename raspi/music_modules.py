@@ -14,6 +14,9 @@ class MusicModule(ABC):
     def process(sub_matrix: np.ndarray):
         raise NotImplementedError
 
+    def get_values(self) -> np.ndarray:
+        return np.zeros((self.bottom, self.right))
+
 
 class Keyboard(MusicModule):
     def __init__(self, setup, config):
@@ -34,3 +37,6 @@ class Keyboard(MusicModule):
 
         self.last_matrix = matrix
         return sound_events
+
+    def get_values(self) -> np.ndarray:
+        return self.last_matrix

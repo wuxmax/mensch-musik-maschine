@@ -15,6 +15,10 @@ class MatrixProcessor:
         for module_name in config['modules']:
             self.set_module(config['modules'][module_name])
 
+        self.log_file = config['log_file']
+        with open(self.log_file, "w") as file:
+            file.write(self.matrix_shape)
+
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
         self.modules.append(module_class(config['setup'], config['sound']))
@@ -24,3 +28,8 @@ class MatrixProcessor:
         
         for module in self.modules:
             module.process(value_matrix[module.top:module.bottom,module.left:module.right])
+
+        # logging
+        # retrievable using np.fromstring(value_matrix.tostring(), dtype=np.dtype('float64')).reshape(self.matrix.shape)
+        with open(self.log_file, "a") as file:
+            file.write("\n" + value_matrix.tostring())
