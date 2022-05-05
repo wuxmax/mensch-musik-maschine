@@ -1,3 +1,8 @@
+midi_player:
+  # port: 'Circuit MIDI 1'
+  port: 'Circuit'
+  channel: 0
+  n_voices: 3
 matrix_shape: 
   horizontal: 5
   vertical: 1

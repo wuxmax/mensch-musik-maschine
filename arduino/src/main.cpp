@@ -3,6 +3,11 @@
 
 int OwnI2CAdress = 11;
 
+// int n_sensors = 6;
+// unsigned int sensorPins[6] = {A0, A1, A2, A3, A6, A7};
+// unsigned int sensorValues[6] = {0, 0, 0, 0, 0, 0};
+
+int n_sensors = 4;
 unsigned int sensorPins[4] = {A0, A1, A2, A3};
 unsigned int sensorValues[4] = {0, 0, 0, 0};
 
@@ -21,7 +26,7 @@ void requestEvents()
 
 void setup()
 {
-  for (int i; i < 4; i++) {
+  for (int i; i < n_sensors; i++) {
     pinMode(sensorPins[i], INPUT);
   }  
 
@@ -37,10 +42,10 @@ void setup()
 void loop()
 {
   Serial.println("----------------");
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < n_sensors; i++) {
     sensorValues[i] = analogRead(sensorPins[i]);
     Serial.println(sensorValues[i]);
   }
 
-  // delay(500);
+  delay(500);  // TODO: remove!
 }
