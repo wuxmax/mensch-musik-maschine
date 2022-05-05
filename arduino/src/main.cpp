@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-int OwnI2CAdress = 11;
+int OwnI2CAdress = 13;
 
-// int n_sensors = 6;
-// unsigned int sensorPins[6] = {A0, A1, A2, A3, A6, A7};
-// unsigned int sensorValues[6] = {0, 0, 0, 0, 0, 0};
+int n_sensors = 6;
+unsigned int sensorPins[6] = {A0, A1, A2, A3, A6, A7};
+unsigned int sensorValues[6] = {0, 0, 0, 0, 0, 0};
 
-int n_sensors = 4;
-unsigned int sensorPins[4] = {A0, A1, A2, A3};
-unsigned int sensorValues[4] = {0, 0, 0, 0};
+// int n_sensors = 4;
+// unsigned int sensorPins[4] = {A0, A1, A2, A3};
+// unsigned int sensorValues[4] = {0, 0, 0, 0};
 
 
 // void receiveEvents(int nBytes)
@@ -44,8 +44,10 @@ void loop()
   Serial.println("----------------");
   for (int i = 0; i < n_sensors; i++) {
     sensorValues[i] = analogRead(sensorPins[i]);
+    Serial.print(sensorPins[i]);
+    Serial.print(": ");
     Serial.println(sensorValues[i]);
   }
 
-  delay(500);  // TODO: remove!
+  // delay(500);  // TODO: remove!
 }
