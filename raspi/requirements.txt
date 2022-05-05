@@ -1,4 +1,4 @@
-numpy
+# numpy
 smbus2
 mido
 rtmidi
