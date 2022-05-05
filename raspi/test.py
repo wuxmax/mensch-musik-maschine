@@ -1,9 +1,11 @@
+import ast
 from cgi import test
 from time import sleep
 
 import numpy as np
 
 from matrix_processor import MatrixProcessor
+from utils import load_config
 from midi_note_player import MidiNotePlayer
 
 CONFIG_FILE = "config.yml"
@@ -21,11 +23,18 @@ test_data5 = np.array([0, 0, 0, 0, 100]).reshape(1,-1)
 test_data6 = np.array([100, 0, 0, 0, 0]).reshape(1,-1)
 test_data7 = np.array([100, 100, 0, 0, 0]).reshape(1,-1)
 
+def read_and_print_log():
+    log_file = load_config(CONFIG_FILE)['log_file']
+    with open(log_file, "rb") as file:
+        while True:
+            try:
+                print(np.load(file, allow_pickle=True))
+            except:
+                break
 
 # test_data = [test_data1, test_data0, test_data2, test_data0, test_data3, test_data0, test_data4, test_data0, test_data5, test_data0] * 100
 # test_data = [test_data1, test_data2, test_data3, test_data4, test_data5] * 100
 test_data = [test_data6, test_data7]
-
 
 if __name__ == "__main__":
     # matpro.midi_player.reset()
@@ -39,4 +48,5 @@ if __name__ == "__main__":
     #         sleep(1)
     # except KeyboardInterrupt:
     #     matpro.midi_player.reset()
-        
+    
+    read_and_print_log()

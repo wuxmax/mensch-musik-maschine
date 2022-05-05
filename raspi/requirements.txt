@@ -1,4 +1,7 @@
 numpy
 smbus2
 mido
+rtmidi
+tabulate
+pyyaml
 python-rtmidi

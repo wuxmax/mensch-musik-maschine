@@ -3,6 +3,7 @@ from abc import ABC
 import numpy as np
 
 import music_modules
+from visualization import Interface
 from sound_events import MidiNoteEvent
 from midi_note_player import MidiNotePlayer
 from utils import load_config
@@ -17,6 +18,11 @@ class MatrixProcessor:
         self.modules = []
         for module_name in config['modules']:
             self.set_module(config['modules'][module_name])
+
+        self.log_file = config['log_file']
+        open(self.log_file, 'w').close()
+
+        self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
@@ -34,6 +40,9 @@ class MatrixProcessor:
                 case MidiNoteEvent:
                     self.midi_player.play_note(sound_event)
 
+         # render CLI output
+        self.visualization.render()
 
-
-        
+        # logging
+        with open(self.log_file, "ab") as file:
+            np.save(file, value_matrix)
