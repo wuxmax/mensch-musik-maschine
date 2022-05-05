@@ -4,6 +4,7 @@ import numpy as np
 
 from utils import load_config
 import music_modules
+from visualization import Interface
 
 
 class MatrixProcessor:    
@@ -16,8 +17,9 @@ class MatrixProcessor:
             self.set_module(config['modules'][module_name])
 
         self.log_file = config['log_file']
-        with open(self.log_file, "w") as file:
-            file.write(self.matrix_shape)
+        open(self.log_file, 'w').close()
+
+        self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
@@ -29,7 +31,9 @@ class MatrixProcessor:
         for module in self.modules:
             module.process(value_matrix[module.top:module.bottom,module.left:module.right])
 
+        # render CLI output
+        self.visualization.render()
+
         # logging
-        # retrievable using np.fromstring(value_matrix.tostring(), dtype=np.dtype('float64')).reshape(self.matrix.shape)
-        with open(self.log_file, "a") as file:
-            file.write("\n" + value_matrix.tostring())
+        with open(self.log_file, "ab") as file:
+            np.save(file, value_matrix)

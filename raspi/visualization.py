@@ -1,40 +1,38 @@
-from sys import modules
 from typing import List, Tuple
 
 import numpy as np
+from tabulate import tabulate
 
 
 class Interface():
     
     def __init__(self, modules, shape) -> None:
+        self.modules: List[Tuple] = modules
         self.shape: Tuple(int, int) = shape
-        self.modules: List[Tuple] = []
         self.lines: List[int] = []
-
-        for module in modules:
-            self.modules.append(module)
-            if module.left != 0:
-                for i in range(module.top, module.bottom):
-                  self.vlines.append((module.left, i))
-            if module.top != 0:
-                for i in range(module.left, module.right):
-                  self.hlines.append((i, module.top))
+        self.module_name_spacer: int = max([len(module.name) for module in self.modules])
 
     def render(self) -> None:
-        vertical, horizontal = self.shape
         activations, names = self.get_activations_and_names()
-        names = self.get_names()
-        print(" _ " * (horizontal * 2), flush=True)
-        for i in range(horizontal):
-            print_line: str = "| "
-            for j in range(vertical):
-                if names[i][j] != 0:
-                    print_line += names[i][j]
+        vertical, horizontal = self.shape
+        assert activations.shape[1] == horizontal
+        assert len(names[0]) == horizontal
+        
+        table = []
+        for i in range(vertical):
+            # add names if any
+            if any(elem is not None for elem in names[i]):
+                table.append([name if name else "-" * self.module_name_spacer for name in names[i]])
+            
+            # add activations
+            table.append(activations[i])
+
+        print(tabulate(table))
 
 
     def get_activations_and_names(self) -> np.ndarray:
         activations = np.zeros(self.shape)
-        names = np.zeros(self.shape)
+        names = [[None for i in range(self.shape[1])] for i in range(self.shape[0])]
         for module in self.modules:
             # get activation values for sensors in module
             module_activations = module.get_values()
