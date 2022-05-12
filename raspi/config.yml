@@ -31,4 +31,3 @@ modules:
       threshold: 600
       bpm: 120
       midi_note: 35
-log_file: 'log.npy'
