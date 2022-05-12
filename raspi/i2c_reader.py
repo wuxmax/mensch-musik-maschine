@@ -28,7 +28,6 @@ class I2CReader:
     def read(self, i2c_address: int) -> list[int]:
         try:
             block_data = self.smbus.read_i2c_block_data(i2c_address, 0x00, N_DEVICE_SENSORS * 2)
-            # print(f"block data {i2c_address}: {block_data}")
         except Exception as e:
             print(f"I2C read exception: {e}")
             return None
@@ -39,15 +38,14 @@ class I2CReader:
         for i2c_address in self.i2c_addresses:
             i2c_device_values = self.read(i2c_address)
             if i2c_device_values:
-                # print(i2c_device_values)
-                self.sensor_values[i2c_address] = i2c_device_values
+                for sensor_idx in range(N_DEVICE_SENSORS):
+                    self.sensor_values[i2c_address] = i2c_device_values
         
         for row_idx, row in enumerate(self.sensor_matrix):
             for col_idx, (device_addr, sensor_idx) in enumerate(row):
-                # print(self.sensor_values)
-                
-                # print(f"device: {device_addr}, sensor: {sensor_idx}")
-                self.value_matrix[row_idx, col_idx] = self.sensor_values[device_addr][sensor_idx]
+                sensor_value = self.sensor_values[device_addr][sensor_idx]
+                if sensor_value in range(0, 1024):
+                    self.value_matrix[row_idx, col_idx] = sensor_value
                 
         return self.value_matrix
 

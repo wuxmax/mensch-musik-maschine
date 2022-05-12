@@ -30,15 +30,23 @@ class Keyboard(MusicModule):
         self.last_matrix: np.ndarray = np.zeros(self.note_mapping.shape)
 
     def process(self, matrix: np.ndarray):
-        assert matrix.shape == self.note_mapping.shape
+        try:
+            assert matrix.shape == self.note_mapping.shape
+        except AssertionError:
+            print(f"AssertionError: matrix.shape: {matrix.shape} != note_mapping.shape: {self.note_mapping.shape}")
         
         sound_events = []
         
         for note_idx, difference in np.ndenumerate(matrix - self.last_matrix):
-            if difference > self.threshold:
-                sound_events.append(MidiNoteEvent(note=self.note_mapping[note_idx], velocity=int(difference)))
+            if difference <= -self.threshold:
+                sound_events.append(
+                    MidiNoteEvent(
+                        note=self.note_mapping[note_idx],
+                        velocity=int(min(difference * (-1), MidiNoteEvent.value_range[-1]))
+                    )
+                )
 
-        self.last_matrix = matrix
+        self.last_matrix = matrix.copy()
         return sound_events
 
     def get_values(self) -> np.ndarray:
