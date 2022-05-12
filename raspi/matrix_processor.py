@@ -16,8 +16,8 @@ class MatrixProcessor:
         self.midi_player = MidiNotePlayer(**config['midi_player'])
 
         self.modules = []
-        for module_name in config['modules']:
-            self.set_module(config['modules'][module_name])
+        for module in config['modules'].values():
+            self.set_module(module)
 
         self.log_file = config['log_file']
         open(self.log_file, 'w').close()
