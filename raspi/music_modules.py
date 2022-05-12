@@ -35,16 +35,15 @@ class MusicModule(ABC):
 
 
 class Keyboard(MusicModule):
-    def __init__(self, setup, config):
+    def __init__(self, setup, sound):
         super().__init__(setup)
-        # TODO: implement note mapping as given in config file
-        self.note_mapping: np.ndarray = np.array(config['note_mapping']).reshape(self.shape[0], self.shape[1])
-        self.threshold: float = config['threshold']
-
+        self.note_duration = sound['note_duration']
+        self.note_mapping: np.ndarray = np.array(sound['note_mapping']).reshape(self.shape[0], self.shape[1])
+        
     def module_process(self, matrix: np.ndarray):        
         sound_events = []
         for note_idx, difference in np.ndenumerate(matrix - self.last_matrix):
-            if difference <= -self.threshold:
+            if difference != 0:
                 sound_events.append(
                     MidiNoteEvent(
                         note=self.note_mapping[note_idx],
@@ -57,7 +56,7 @@ class Sequencer(MusicModule):
     def __init__(self, setup, sound):
         super().__init__(setup)
         self.beat_duration = 60 / sound['bpm']
-        self.threshold = sound['threshold']
+        self.note_duration = sound['note_duration']
         self.midi_note = sound['midi_note']
         self.start_time = datetime.datetime.now()
         self.beats = 0
@@ -65,7 +64,7 @@ class Sequencer(MusicModule):
     def module_process(self, matrix: np.ndarray):
         return_list = []
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
-            if matrix[0][self.beats % 8] < self.threshold:
-                return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = 0.2)]
+            if matrix[0][self.beats % 8] < 0:
+                return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = self.note_duration)]
             self.beats += 1
         return return_list

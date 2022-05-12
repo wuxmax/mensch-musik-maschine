@@ -8,10 +8,14 @@ from time import sleep
 CONFIG_FILE = "config.yml"
 
 matpro = MatrixProcessor(CONFIG_FILE)
+datpro = 
 reader = I2CReader()
 
 
 if __name__ == "__main__":
+     
+    
+    
     while True:
         matpro.process(reader.get_value_matrix())
         # sleep(3)

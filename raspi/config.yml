@@ -1,11 +1,10 @@
 midi_player:
   port: 'Circuit:Circuit MIDI 1 24:0'
-  # port: 'Midi Through:Midi Through Port-0 14:0'
   channel: 0
   n_voices: 1
 matrix_shape: 
-  horizontal: 8
   vertical: 2
+  horizontal: 8
 data_preprocessor:
   threshold: 0.1
 modules:
@@ -18,9 +17,8 @@ modules:
       bottom: 1
       right: 8
     sound:
-      threshold: 10000
       note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
-      root_note: C
+      note_duration: 1.0
   sequencer:
     module: Sequencer
     setup:
@@ -30,6 +28,6 @@ modules:
       bottom: 2
       right: 8
     sound:
-      threshold: 50
       bpm: 120
       midi_note: 35
+      note_duration: 0.2
