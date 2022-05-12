@@ -5,3 +5,4 @@ rtmidi
 tabulate
 pyyaml
 python-rtmidi
+click
