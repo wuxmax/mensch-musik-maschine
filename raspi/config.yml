@@ -16,7 +16,7 @@ modules:
       bottom: 1
       right: 8
     sound:
-      threshold: 100
+      threshold: 10000
       note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
       root_note: C
   sequencer:

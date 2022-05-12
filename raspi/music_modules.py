@@ -15,14 +15,20 @@ class MusicModule(ABC):
         self.shape = (setup['bottom'] - setup['top'], setup['right'] - setup['left'])
         self.last_matrix: np.ndarray = np.zeros(self.shape)
 
-    def check_matrix_shape(self, matrix: np.ndarray):
+    def pre_process(self, matrix: np.ndarray):
         try:
             assert matrix.shape == self.shape
         except AssertionError:
             print(f"AssertionError: matrix.shape: {matrix.shape} != note_mapping.shape: {self.note_mapping.shape}")
     
-    def process():
-        raise NotImplementedError
+    def process(self, matrix: np.ndarray):
+        self.pre_process(matrix)
+        sound_events = self.module_process(matrix)
+        self.post_process(matrix)
+        return sound_events
+    
+    def post_process(self, matrix: np.ndarray):
+        self.last_matrix = matrix.copy()
 
     # def get_values(self) -> np.ndarray:
     #     return np.zeros((self.bottom, self.right))
@@ -39,9 +45,7 @@ class Keyboard(MusicModule):
         self.threshold: float = config['threshold']
 
 
-    def process(self, matrix: np.ndarray):
-        self.check_matrix_shape(matrix)
-        
+    def module_process(self, matrix: np.ndarray):        
         sound_events = []
         for note_idx, difference in np.ndenumerate(matrix - self.last_matrix):
             if difference <= -self.threshold:
@@ -51,8 +55,6 @@ class Keyboard(MusicModule):
                         velocity=int(min(difference * (-1), MidiNoteEvent.value_range[-1]))
                     )
                 )
-
-        self.last_matrix = matrix.copy()
         return sound_events
 
 class Sequencer(MusicModule):
@@ -64,7 +66,7 @@ class Sequencer(MusicModule):
         self.start_time = datetime.datetime.now()
         self.beats = 0
 
-    def process(self, matrix: np.ndarray):
+    def module_process(self, matrix: np.ndarray):
         return_list = []
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
             if matrix[0][self.beats % 8] > self.threshold:
