@@ -1,11 +1,11 @@
 midi_player:
-  # port: 'Circuit MIDI 1'
-  port: 'Circuit'
+  port: 'Circuit:Circuit MIDI 1 24:0'
+  # port: 'Midi Through:Midi Through Port-0 14:0'
   channel: 0
-  n_voices: 3
+  n_voices: 1
 matrix_shape: 
-  horizontal: 5
-  vertical: 1
+  horizontal: 8
+  vertical: 2
 modules:
   keyboard:
     module: Keyboard
@@ -14,9 +14,19 @@ modules:
       top: 0
       left: 0
       bottom: 1
-      right: 5
+      right: 8
     sound:
-      threshold: 50
+      threshold: 100
       note_mapping: chromatic # blues dur moll
       root_note: C
+   sequencer:
+    module: Sequencer
+    setup:
+      name: sequencer1
+      top: 1
+      left: 0
+      bottom: 2
+      right: 8
+    sound:
+      threshold: 100
 log_file: 'log.npy'

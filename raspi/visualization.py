@@ -1,3 +1,5 @@
+import sys
+import os
 from typing import List, Tuple
 
 import numpy as np
@@ -27,6 +29,9 @@ class Interface():
             # add activations
             table.append(activations[i])
 
+        # print(tabulate(table), flush=True)
+        # sys.stdout.flush()
+        # os.system('cls' if os.name == 'nt' else 'clear')
         print(tabulate(table))
 
 

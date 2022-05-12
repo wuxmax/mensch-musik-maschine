@@ -34,14 +34,14 @@ class MatrixProcessor:
         sound_events = []
         for module in self.modules:
             sound_events += module.process(value_matrix[module.top:module.bottom,module.left:module.right])
-        
+                
         for sound_event in sound_events:
             # match type(sound_event):
             #     case MidiNoteEvent:
             if type(sound_event) == MidiNoteEvent:
                     self.midi_player.play_note(sound_event)
 
-         # render CLI output
+        # render CLI output
         self.visualization.render()
 
         # logging
