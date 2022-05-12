@@ -29,7 +29,7 @@ class I2CReader:
         try:
             block_data = self.smbus.read_i2c_block_data(i2c_address, 0x00, N_DEVICE_SENSORS * 2)
         except Exception as e:
-            print(f"I2C read exception: {e}")
+            # print(f"I2C read exception: {e}")
             return None
 
         return [int.from_bytes(block_data[idx:idx + 2], byteorder='little', signed=False) for idx in range(0, N_DEVICE_SENSORS * 2, 2)]

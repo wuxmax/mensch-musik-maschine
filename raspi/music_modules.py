@@ -19,7 +19,7 @@ class MusicModule(ABC):
         try:
             assert matrix.shape == self.shape
         except AssertionError:
-            print(f"AssertionError: matrix.shape: {matrix.shape} != note_mapping.shape: {self.note_mapping.shape}")
+            print(f"AssertionError: matrix shape: {matrix.shape} != module shape: {self.shape}")
     
     def process(self, matrix: np.ndarray):
         self.pre_process(matrix)
@@ -29,9 +29,6 @@ class MusicModule(ABC):
     
     def post_process(self, matrix: np.ndarray):
         self.last_matrix = matrix.copy()
-
-    # def get_values(self) -> np.ndarray:
-    #     return np.zeros((self.bottom, self.right))
 
     def get_values(self) -> np.ndarray:
         return self.last_matrix
@@ -43,7 +40,6 @@ class Keyboard(MusicModule):
         # TODO: implement note mapping as given in config file
         self.note_mapping: np.ndarray = np.array(config['note_mapping']).reshape(self.shape[0], self.shape[1])
         self.threshold: float = config['threshold']
-
 
     def module_process(self, matrix: np.ndarray):        
         sound_events = []
@@ -69,7 +65,7 @@ class Sequencer(MusicModule):
     def module_process(self, matrix: np.ndarray):
         return_list = []
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
-            if matrix[0][self.beats % 8] > self.threshold:
-                return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127))]
+            if matrix[0][self.beats % 8] < self.threshold:
+                return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = 0.2)]
             self.beats += 1
         return return_list

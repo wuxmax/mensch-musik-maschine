@@ -17,14 +17,11 @@ class MidiNotePlayer:
 
     def play_note(self, note_event: MidiNoteEvent):
         voice = next((voice for voice, note in enumerate(self.current_notes) if note < 0), 0)
-        print(f"{voice=}")
 
         if self.current_notes[voice] >= 0:
             self.stop_note(self.current_notes[voice])
         self.current_notes[voice] = note_event.note
         
-        print(f"{note_event.note=}, {note_event.velocity=}")
-
         msg = mido.Message('note_on', 
             channel=self.channel, 
             note=note_event.note,

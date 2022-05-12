@@ -6,6 +6,8 @@ midi_player:
 matrix_shape: 
   horizontal: 8
   vertical: 2
+data_preprocessor:
+  threshold: 0.1
 modules:
   keyboard:
     module: Keyboard
@@ -28,7 +30,7 @@ modules:
       bottom: 2
       right: 8
     sound:
-      threshold: 600
+      threshold: 50
       bpm: 120
       midi_note: 35
 log_file: 'log.npy'
