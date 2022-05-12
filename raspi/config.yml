@@ -17,16 +17,16 @@ modules:
       right: 8
     sound:
       threshold: 100
-      note_mapping: chromatic # blues dur moll
+      note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
       root_note: C
-   sequencer:
-    module: Sequencer
-    setup:
-      name: sequencer1
-      top: 1
-      left: 0
-      bottom: 2
-      right: 8
-    sound:
-      threshold: 100
+  #  sequencer:
+  #   module: Sequencer
+  #   setup:
+  #     name: sequencer1
+  #     top: 1
+  #     left: 0
+  #     bottom: 2
+  #     right: 8
+  #   sound:
+  #     threshold: 100
 log_file: 'log.npy'

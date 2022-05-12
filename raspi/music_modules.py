@@ -22,7 +22,7 @@ class Keyboard(MusicModule):
     def __init__(self, setup, config):
         super().__init__(setup)
         # TODO: implement note mapping as given in config file
-        self.note_mapping: np.ndarray = np.array([[28, 31, 33, 35, 38, 41, 43, 45], [28, 31, 33, 35, 38, 41, 43, 45]]).reshape(2,-1)
+        self.note_mapping: np.ndarray = np.array(config['note_mapping']).reshape(config['top'] - config['bottom'], config['left'] - config['right'])
         self.threshold: float = config['threshold']
 
         self.last_matrix: np.ndarray = np.zeros(self.note_mapping.shape)
