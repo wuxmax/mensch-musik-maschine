@@ -41,7 +41,7 @@ class MatrixProcessor:
             if type(sound_event) == MidiNoteEvent:
                     self.midi_player.play_note(sound_event)
 
-         # render CLI output
+        # render CLI output
         self.visualization.render()
 
         # logging
