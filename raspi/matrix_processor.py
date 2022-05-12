@@ -1,4 +1,4 @@
-from abc import ABC
+import datetime
 
 import numpy as np
 
@@ -10,7 +10,7 @@ from utils import load_config
 
 
 class MatrixProcessor:    
-    def __init__(self, config_file: str = 'config.yaml'):
+    def __init__(self, config_file: str = 'config.yaml', logging=True):
         config = load_config(config_file)
         self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
         self.midi_player = MidiNotePlayer(**config['midi_player'])
@@ -19,8 +19,9 @@ class MatrixProcessor:
         for module in config['modules'].values():
             self.set_module(module)
 
-        self.log_file = config['log_file']
-        open(self.log_file, 'w').close()
+        self.logging = logging
+        if self.logging:
+            self.log_file = 'logs/log_' + datetime.datetime.now().strftime('%d%m%Y-%H:%M:%S') + '.csv'
 
         self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
 
@@ -45,5 +46,7 @@ class MatrixProcessor:
         self.visualization.render()
 
         # logging
-        with open(self.log_file, "ab") as file:
-            np.save(file, value_matrix)
+        if self.logging:
+            with open(self.log_file, "ab") as file:
+                np.savetxt(file, value_matrix, fmt='%.18e', delimiter=',', newline='\n',
+                           header='', footer='', encoding=None)
