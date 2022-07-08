@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-int OwnI2CAdress = 13;
+int OwnI2CAdress = 11;
 
 int n_sensors = 6;
 unsigned int sensorPins[6] = {A0, A1, A2, A3, A6, A7};
@@ -21,7 +21,7 @@ void requestEvents()
 {
   // Serial.print(F("sending value: "));
   // Serial.println((sensorValue));
-  Wire.write(static_cast<char*>(static_cast<void*>(&sensorValues)), 8);
+  Wire.write(static_cast<char*>(static_cast<void*>(&sensorValues)), n_sensors * 2);
 }
 
 void setup()
