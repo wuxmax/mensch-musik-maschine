@@ -1,0 +1,1 @@
+pd -nogui -verbose -open test-1.pd -send "pd dsp 1"
