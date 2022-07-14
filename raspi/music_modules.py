@@ -42,15 +42,18 @@ class Keyboard(MusicModule):
         
     def module_process(self, matrix: np.ndarray):        
         sound_events = []
-        for note_idx, product in np.ndenumerate(matrix * self.last_matrix):
-            if product <= 0:
+        for idx, product in np.ndenumerate(matrix * self.last_matrix):
+            if product <= 0 and (product == 0 and matrix[idx] != self.last_matrix[idx]):
                 sound_events.append(
                     MidiNoteEvent(
-                        note=self.note_mapping[note_idx],
-                        velocity=abs(int(matrix[note_idx]))
+                        note=self.note_mapping[idx],
+                        velocity=abs(int(matrix[idx]))
                     )
                 )
+
+        # print(f"keyboard: {sound_events}")
         return sound_events
+        
 
 class Sequencer(MusicModule):
     def __init__(self, setup, sound):
@@ -69,4 +72,7 @@ class Sequencer(MusicModule):
             if matrix[0][self.beats % self.shape[1]] != 0:
                 return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = self.note_duration)]
             self.beats += 1
+        
+        # print(f"sequencer: {return_list}")
         return return_list
+        

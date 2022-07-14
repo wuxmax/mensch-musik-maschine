@@ -6,3 +6,4 @@ tabulate
 pyyaml
 python-rtmidi
 click
+tqdm

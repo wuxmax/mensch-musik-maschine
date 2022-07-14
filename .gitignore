@@ -1,3 +1,5 @@
+raspi/logs/*.csv
+
 .pio
 .vscode
 .DS_Store
