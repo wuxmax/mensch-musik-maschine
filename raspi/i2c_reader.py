@@ -3,13 +3,25 @@ from time import sleep
 from smbus2 import SMBus
 import numpy as np
 
-I2C_DEVICE_ADDRESSES = [13, 11, 12]
+# TODO: move to config file!
+
+# I2C_DEVICE_ADDRESSES = [13, 12, 11]
+# N_DEVICE_SENSORS = 6
+
+# # 4: (12, 5), 8: (11, 0), 15: (11, 3) have different offsets
+# SENSOR_MATRIX = [
+#     [(13, 5), (13, 3), (13, 4), (12, 5), (12, 0), (12, 1), (11, 1), (11, 0)],
+#     [(13, 1), (13, 0), (13, 2), (12, 4), (12, 3), (12, 2), (11, 3), (11, 2)],
+# ]
+
+
+I2C_DEVICE_ADDRESSES = [13, 12]
 N_DEVICE_SENSORS = 6
 
 # 4: (12, 5), 8: (11, 0), 15: (11, 3) have different offsets
 SENSOR_MATRIX = [
-    [(13, 5), (13, 3), (13, 4), (12, 5), (12, 0), (12, 1), (11, 1), (11, 0)],
-    [(13, 1), (13, 0), (13, 2), (12, 4), (12, 3), (12, 2), (11, 3), (11, 2)],
+    [(13, 1), (13, 0), (13, 2), (12, 4), (12, 3), (12, 2)],
+    [(13, 5), (13, 3), (13, 4), (12, 5), (12, 0), (12, 1)]
 ]
 
 
@@ -47,11 +59,12 @@ class I2CReader:
                 if sensor_value in range(0, 1024):
                     self.value_matrix[row_idx, col_idx] = sensor_value
                 
-        return self.value_matrix
+        return self.value_matrix.copy()
 
 
 if __name__ == "__main__":
     i2c_reader = I2CReader()
+    np.set_printoptions(formatter={'float_kind':"{:.1f}".format})
     
     while True:
         print(i2c_reader.get_value_matrix())

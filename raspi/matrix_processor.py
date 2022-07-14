@@ -10,8 +10,7 @@ from utils import load_config
 
 
 class MatrixProcessor:    
-    def __init__(self, config_file: str = 'config.yaml', logging=True):
-        config = load_config(config_file)
+    def __init__(self, config: dict, logging=True):
         self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
         self.midi_player = MidiNotePlayer(**config['midi_player'])
 

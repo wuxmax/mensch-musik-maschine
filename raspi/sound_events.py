@@ -11,8 +11,9 @@ class MidiNoteEvent(SoundEvent):
             assert note in self.value_range
             assert velocity in self.value_range
         except AssertionError:
-            print(f"Note and velocity must be within {self.value_range[0]} and {self.value_range[-1]}."
+            print(f"Note and velocity must be within {self.value_range[0]} and {self.value_range[-1]}. "
                 f"Values: note: {note}, velocity: {velocity}")
+            exit(1)
 
         self.note = note
         self.velocity = velocity

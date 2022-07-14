@@ -1,12 +1,48 @@
+# matrix_shape: 
+#   vertical: 2
+#   horizontal: 8
+# data_preprocessor:
+#   calibration_period: 100
+#   threshold: 0.1
+# midi_player:
+#   port: 'Circuit:Circuit MIDI 1 24:0'
+#   channel: 0
+#   n_voices: 1
+# modules:
+#   keyboard:
+#     module: Keyboard
+#     setup:
+#       name: keyboard1
+#       top: 0
+#       left: 0
+#       bottom: 1
+#       right: 8
+#     sound:
+#       note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
+#       note_duration: 1.0
+#   sequencer:
+#     module: Sequencer
+#     setup:
+#       name: sequencer1
+#       top: 1
+#       left: 0
+#       bottom: 2
+#       right: 8
+#     sound:
+#       bpm: 120
+#       midi_note: 35
+#       note_duration: 0.2
+
+matrix_shape: 
+  vertical: 2
+  horizontal: 6
+data_preprocessor:
+  calibration_period: 100
+  threshold: 0.1
 midi_player:
   port: 'Circuit:Circuit MIDI 1 24:0'
   channel: 0
   n_voices: 1
-matrix_shape: 
-  vertical: 2
-  horizontal: 8
-data_preprocessor:
-  threshold: 0.1
 modules:
   keyboard:
     module: Keyboard
@@ -15,9 +51,9 @@ modules:
       top: 0
       left: 0
       bottom: 1
-      right: 8
+      right: 6
     sound:
-      note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
+      note_mapping: [31, 33, 35, 38, 41, 43]
       note_duration: 1.0
   sequencer:
     module: Sequencer
@@ -26,7 +62,7 @@ modules:
       top: 1
       left: 0
       bottom: 2
-      right: 8
+      right: 6
     sound:
       bpm: 120
       midi_note: 35

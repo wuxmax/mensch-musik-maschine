@@ -27,7 +27,7 @@ class Interface():
                 table.append([name if name else "-" * self.module_name_spacer for name in names[i]])
             
             # add activations
-            table.append(activations[i])
+            table.append([f"{a:.2f}" for a in activations[i]])
 
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()

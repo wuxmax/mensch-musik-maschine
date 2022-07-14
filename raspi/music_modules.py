@@ -42,12 +42,12 @@ class Keyboard(MusicModule):
         
     def module_process(self, matrix: np.ndarray):        
         sound_events = []
-        for note_idx, difference in np.ndenumerate(matrix - self.last_matrix):
-            if difference != 0:
+        for note_idx, product in np.ndenumerate(matrix * self.last_matrix):
+            if product <= 0:
                 sound_events.append(
                     MidiNoteEvent(
                         note=self.note_mapping[note_idx],
-                        velocity=int(min(difference * (-1), MidiNoteEvent.value_range[-1]))
+                        velocity=abs(int(matrix[note_idx]))
                     )
                 )
         return sound_events
@@ -63,8 +63,10 @@ class Sequencer(MusicModule):
 
     def module_process(self, matrix: np.ndarray):
         return_list = []
+        # check for correct time
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
-            if matrix[0][self.beats % 8] < 0:
+            # check for correct value
+            if matrix[0][self.beats % 8] != 0:  # TODO: change hard-coded 8
                 return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = self.note_duration)]
             self.beats += 1
         return return_list
