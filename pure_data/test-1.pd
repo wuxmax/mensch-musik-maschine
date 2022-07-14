@@ -9,7 +9,7 @@
 #X msg 176 15 bang;
 #X obj 178 83 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
 #000000;
-#X obj 251 27 loadbang;
+#X obj 300 23 loadbang;
 #X obj 326 93 netreceive 2342;
 #X obj 467 145 print, f 12;
 #X msg 538 65 hallo;
@@ -22,5 +22,6 @@
 #X connect 8 0 4 0;
 #X connect 9 0 4 0;
 #X connect 9 0 12 0;
+#X connect 9 0 10 0;
 #X connect 10 0 11 0;
 #X connect 12 0 11 0;
