@@ -38,6 +38,8 @@ matrix_shape:
   horizontal: 6
 data_preprocessor:
   calibration_period: 10000
+pd_connector:
+  socket_port: 2342
 midi_player:
   port: 'Circuit MIDI 1'
   channel: 0
