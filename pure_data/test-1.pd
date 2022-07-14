@@ -3,13 +3,16 @@
 #X obj 78 264 dac~;
 #X msg 29 227 1;
 #X msg 29 192 start;
-#X msg 254 164 open Sink_Phrase_009.wav mySamples;
-#X obj 70 51 trigger;
-#X obj 206 22 osc~;
-#X msg 258 26 bang;
+#X msg 131 166 open Sink_Phrase_009.wav mySamples;
+#X obj 41 61 trigger;
+#X obj 151 24 osc~;
+#X msg 197 19 bang;
 #X obj 178 83 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc #000000
 #000000;
-#X obj 267 82 loadbang;
+#X obj 246 69 loadbang;
+#X obj 388 47 netreceive 2342;
+#X obj 467 145 print, f 12;
+#X msg 538 65 hallo;
 #X connect 0 0 1 0;
 #X connect 0 0 1 1;
 #X connect 2 0 0 0;
@@ -18,3 +21,5 @@
 #X connect 4 0 3 0;
 #X connect 8 0 4 0;
 #X connect 9 0 4 0;
+#X connect 10 0 11 0;
+#X connect 12 0 11 0;
