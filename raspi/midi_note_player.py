@@ -9,7 +9,7 @@ from sound_events import MidiNoteEvent
 class MidiNotePlayer:
     def __init__(self, channel: int, port: str, n_voices: int):
         self.channel: int = channel
-#        self.port = mido.open_output(port)
+        self.port = mido.open_output(port)
         self.reset()
         
         self.current_notes = [-1] * n_voices
@@ -27,7 +27,7 @@ class MidiNotePlayer:
             note=note_event.note,
             velocity=note_event.velocity, 
             time=1)  # we do not really know, what time does
-#        self.port.send(msg)
+        self.port.send(msg)
 
         threading.Thread(target=self.time_switch, args=(voice, note_event.duration)).start()
 
@@ -39,10 +39,10 @@ class MidiNotePlayer:
         if (self.notes_started[voice] == note_started):
             self.stop_note(self.current_notes[voice])
             self.current_notes[voice] = -1
-
+            
     def stop_note(self, note: int):
         msg = mido.Message('note_off', note=note)
-#        self.port.send(msg)
+        self.port.send(msg)
 
     def reset(self):
         for note in MidiNoteEvent.value_range:

@@ -37,10 +37,10 @@ matrix_shape:
   vertical: 2
   horizontal: 6
 data_preprocessor:
-  calibration_period: 100
+  calibration_period: 1000
   threshold: 0.1
 midi_player:
-  port: 'Circuit:Circuit MIDI 1 24:0'
+  port: 'Circuit MIDI 1'
   channel: 0
   n_voices: 1
 modules:

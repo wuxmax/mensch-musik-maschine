@@ -66,7 +66,7 @@ class Sequencer(MusicModule):
         # check for correct time
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
             # check for correct value
-            if matrix[0][self.beats % 8] != 0:  # TODO: change hard-coded 8
+            if matrix[0][self.beats % self.shape[1]] != 0:
                 return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = self.note_duration)]
             self.beats += 1
         return return_list
