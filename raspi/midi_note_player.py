@@ -58,7 +58,11 @@ if __name__=="__main__":
     config = load_config()['midi_player']
     player = MidiNotePlayer(**config)
 
-    while True:
-        player.play_note(MidiNoteEvent(note=34, velocity=100))
-        print("played")
-        sleep(1)
+    # while True:
+        #player.play_note(MidiNoteEvent(note=34, velocity=100))
+    
+    for _ in range(5):
+        for v in range(100):
+            player.port.send(mido.Message('control_change', channel=1, control=2, value=v))
+            print("sent")
+            sleep(0.01)
