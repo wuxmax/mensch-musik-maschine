@@ -45,9 +45,20 @@ class MidiNotePlayer:
         self.port.send(msg)
 
     def reset(self):
-        for note in MidiNoteEvent.value_range:
-            self.stop_note(note)
+        self.port.reset()
+        # for note in MidiNoteEvent.value_range:
+        #     self.stop_note(note)
 
 
 if __name__=="__main__":
     print(f"MIDI outupt names: {mido.get_output_names()}")
+
+    from utils import load_config
+
+    config = load_config()['midi_player']
+    player = MidiNotePlayer(**config)
+
+    while True:
+        player.play_note(MidiNoteEvent(note=34, velocity=100))
+        print("played")
+        sleep(1)

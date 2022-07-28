@@ -41,7 +41,8 @@ data_preprocessor:
 pd_connector:
   socket_port: 2342
 midi_player:
-  port: 'Circuit MIDI 1'
+  # port: 'Circuit MIDI 1'
+  port: 'Virtual Raw MIDI 4-0:VirMIDI 4-0 32:0'
   channel: 0
   n_voices: 1
 modules:
