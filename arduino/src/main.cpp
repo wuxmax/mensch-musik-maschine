@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-int OwnI2CAdress = 11;
+int OwnI2CAdress = 17;
 
 int n_sensors = 6;
 unsigned int sensorPins[6] = {A0, A1, A2, A3, A6, A7};

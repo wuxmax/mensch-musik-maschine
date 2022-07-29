@@ -6,10 +6,14 @@ import mido
 
 from sound_events import MidiNoteEvent
 
-class MidiNotePlayer:
-    def __init__(self, channel: int, port: str, n_voices: int):
-        self.channel: int = channel
-        self.port = mido.open_output(port)
+
+class MidiController:
+    def __init__(self, port: str):
+        self.port = mido.open_output(port)  
+    
+class MidiNotePlayer(MidiController):
+    def __init__(self, *setup, n_voices: int):
+        super().__init__(*setup)
         self.reset()
         
         self.current_notes = [-1] * n_voices
@@ -45,24 +49,18 @@ class MidiNotePlayer:
         self.port.send(msg)
 
     def reset(self):
-        self.port.reset()
-        # for note in MidiNoteEvent.value_range:
-        #     self.stop_note(note)
+        # self.port.reset()
+        for note in MidiNoteEvent.value_range:
+            self.stop_note(note)
 
+class MidiControlChanger(MidiController):
+    def __init__(self, port: str, n_voices: int):
+        super().__init__(port)
+
+    def set_value(self, control: int, value: int):
+        msg = mido.Message('control_change', control=control, value=value)#
+        self.port.send(msg)
 
 if __name__=="__main__":
     print(f"MIDI outupt names: {mido.get_output_names()}")
 
-    from utils import load_config
-
-    config = load_config()['midi_player']
-    player = MidiNotePlayer(**config)
-
-    # while True:
-        #player.play_note(MidiNoteEvent(note=34, velocity=100))
-    
-    for _ in range(5):
-        for v in range(100):
-            player.port.send(mido.Message('control_change', channel=1, control=2, value=v))
-            print("sent")
-            sleep(0.01)

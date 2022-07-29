@@ -1,71 +1,57 @@
-# matrix_shape: 
-#   vertical: 2
-#   horizontal: 8
-# data_preprocessor:
-#   calibration_period: 100
-#   threshold: 0.1
-# midi_player:
-#   port: 'Circuit:Circuit MIDI 1 24:0'
-#   channel: 0
-#   n_voices: 1
-# modules:
-#   keyboard:
-#     module: Keyboard
-#     setup:
-#       name: keyboard1
-#       top: 0
-#       left: 0
-#       bottom: 1
-#       right: 8
-#     sound:
-#       note_mapping: [28, 31, 33, 35, 38, 41, 43, 45]
-#       note_duration: 1.0
-#   sequencer:
-#     module: Sequencer
-#     setup:
-#       name: sequencer1
-#       top: 1
-#       left: 0
-#       bottom: 2
-#       right: 8
-#     sound:
-#       bpm: 120
-#       midi_note: 35
-#       note_duration: 0.2
-
 matrix_shape: 
   vertical: 2
   horizontal: 6
+i2c_reader:
+  i2c_device_addresses: [11, 12]
+  n_device_sensors: 6
+  sensor_matrix: [
+    [11, 0], [11, 1], [11, 2], [12, 0], [12, 1], [12, 2],
+    [11, 3], [11, 4], [11, 5], [12, 3], [12, 4], [12, 5]
+  ]
 data_preprocessor:
+  input_value_range: [0, 1023]
+  output_value_range: [0, 127]
   calibration_period: 10000
-pd_connector:
-  socket_port: 2342
-midi_player:
-  # port: 'Circuit MIDI 1'
+  margin_factor: 0
+midi_controller:
   port: 'Virtual Raw MIDI 4-0:VirMIDI 4-0 32:0'
-  channel: 0
-  n_voices: 1
+  # port: 'Circuit MIDI 1'
+midi_note_player:
+  n_voices: 1  
 modules:
-  keyboard:
-    module: Keyboard
+  simple_control:
+    module: SimpleControl
     setup:
-      name: keyboard1
+      name: simplecontrol1
+      midi_channel: 2
       top: 0
       left: 0
       bottom: 1
       right: 6
-    sound:
-      note_mapping: [31, 33, 35, 38, 41, 43]
-      note_duration: 1.0
-  sequencer:
-    module: Sequencer
-    setup:
-      name: sequencer1
-      top: 1
-      left: 0
-      bottom: 2
-      right: 6
-    sound:
-      bpm: 120
-      midi_note: 35
-      note_duration: 0.2
+    sound: 
+      control: 1
+  # keyboard:
+  #   module: Keyboard
+  #   setup:
+  #     name: keyboard1
+  #     midi_channel: 0
+  #     top: 0
+  #     left: 0
+  #     bottom: 1
+  #     right: 6
+  #   sound:
+  #     note_mapping: [31, 33, 35, 38, 41, 43]
+  #     note_duration: 1.0
+  # sequencer:
+  #   module: Sequencer
+  #   setup:
+  #     name: sequencer1
+  #     midi_channel: 1
+  #     top: 1
+  #     left: 0
+  #     bottom: 2
+  #     right: 6
+  #   sound:
+  #     bpm: 120
+  #     midi_note: 35
+  #     note_duration: 0.2

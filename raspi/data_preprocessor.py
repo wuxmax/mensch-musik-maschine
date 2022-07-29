@@ -4,14 +4,13 @@ import numpy as np
 
 from utils import load_config
 
-INPUT_VALUE_RANGE = (0, 1023)
-OUTPUT_VALUE_RANGE = (0, 127)
-MARGIN_FACTOR = 0
-
 class MatrixDataPreprocessor: 
     def __init__(self, config: dict):
         self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
-        self.output_range = OUTPUT_VALUE_RANGE[-1] - OUTPUT_VALUE_RANGE[0]
+        output_value_range = config['data_preprocessor']['output_value_range']
+        self.output_range = output_value_range[-1] - output_value_range[0]
+        self.input_value_range = config['data_preprocessor']['input_value_range']
+        self.margin_factor = config['data_preprocessor']['margin_factor']
         
         # last axis indices: 0 = min, 1 = max
         self.calibration_values = np.empty((*self.matrix_shape, 2))  
@@ -27,9 +26,9 @@ class MatrixDataPreprocessor:
         self.calibration_values[:,:,0] = reference_values_stacked.min(axis=2)
         self.calibration_values[:,:,1] = reference_values_stacked.max(axis=2)
 
-        margin_values = (self.calibration_values[:,:,1] - self.calibration_values[:,:,0]) * MARGIN_FACTOR
-        self.calibration_values[:,:,0] = np.maximum(np.full(self.matrix_shape, INPUT_VALUE_RANGE[0]),  self.calibration_values[:,:,0] - margin_values)
-        self.calibration_values[:,:,1] = np.minimum(np.full(self.matrix_shape, INPUT_VALUE_RANGE[-1]),  self.calibration_values[:,:,1] + margin_values)
+        margin_values = (self.calibration_values[:,:,1] - self.calibration_values[:,:,0]) * self.margin_factor
+        self.calibration_values[:,:,0] = np.maximum(np.full(self.matrix_shape, self.input_value_range[0]),  self.calibration_values[:,:,0] - margin_values)
+        self.calibration_values[:,:,1] = np.minimum(np.full(self.matrix_shape, self.input_value_range[-1]),  self.calibration_values[:,:,1] + margin_values)
 
         self.normalization_values = self.calibration_values.copy()
 
@@ -50,9 +49,9 @@ class MatrixDataPreprocessor:
         normalized_matrix[higher_indeces] = (matrix - self.calibration_values[:,:,1])[higher_indeces]  # all positive
         
         negative_range = np.abs(self.normalization_values[:,:,0] - self.calibration_values[:,:,0])
-        negative_range[negative_range == 0.0] = np.abs(self.calibration_values[:,:,0] - INPUT_VALUE_RANGE[0])[negative_range == 0.0]
+        negative_range[negative_range == 0.0] = np.abs(self.calibration_values[:,:,0] - self.input_value_range[0])[negative_range == 0.0]
         positive_range = np.abs(self.normalization_values[:,:,1] - self.calibration_values[:,:,1])
-        positive_range[positive_range == 0.0] = np.abs(self.calibration_values[:,:,1] - INPUT_VALUE_RANGE[-1])[positive_range == 0.0]
+        positive_range[positive_range == 0.0] = np.abs(self.calibration_values[:,:,1] - self.input_value_range[-1])[positive_range == 0.0]
         
         normalized_matrix[lower_indeces] = ((normalized_matrix / negative_range) * self.output_range)[lower_indeces]
         normalized_matrix[higher_indeces] = ((normalized_matrix / positive_range) * self.output_range)[higher_indeces]

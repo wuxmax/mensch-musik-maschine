@@ -2,12 +2,13 @@ from abc import ABC
 import datetime
 import numpy as np
 
-from sound_events import MidiNoteEvent
+from sound_events import MidiNoteEvent, MidiControlEvent
 
 
 class MusicModule(ABC):
     def __init__(self, setup: dict):
         self.name: str = setup['name']
+        self.midi_channel: int = setup['midi_channel']
         self.top: int = setup['top']
         self.left: int = setup['left']
         self.bottom: int = setup['bottom']
@@ -46,11 +47,11 @@ class Keyboard(MusicModule):
             if product <= 0 and (product == 0 and matrix[idx] != self.last_matrix[idx]):
                 sound_events.append(
                     MidiNoteEvent(
+                        channel=self.midi_channel,
                         note=self.note_mapping[idx],
                         velocity=abs(int(matrix[idx]))
                     )
                 )
-
         # print(f"keyboard: {sound_events}")
         return sound_events
         
@@ -70,9 +71,28 @@ class Sequencer(MusicModule):
         if (datetime.datetime.now() - self.start_time).total_seconds() / self.beat_duration > self.beat_duration * self.beats:
             # check for correct value
             if matrix[0][self.beats % self.shape[1]] != 0:
-                return_list = [MidiNoteEvent(note=self.midi_note, velocity=int(127), duration = self.note_duration)]
+                return_list = [
+                    MidiNoteEvent(
+                        channel=self.midi_channel,
+                        note=self.midi_note,
+                        velocity=MidiNoteEvent.value_range[-1],
+                        duration = self.note_duration)
+                        ]
             self.beats += 1
         
         # print(f"sequencer: {return_list}")
         return return_list
         
+
+class SimpleControl(MusicModule):
+    def __init__(self, setup, sound):
+        super().__init__(setup)
+        self.control = sound['control']
+
+    def module_process(self, matrix: np.ndarray):
+        return MidiControlEvent(
+            channel=self.midi_channel, 
+            control=self.control, 
+            value=np.mean(matrix))
+
+
