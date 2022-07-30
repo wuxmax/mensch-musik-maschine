@@ -1,8 +1,5 @@
 from abc import ABC
 
-from zmq import CHANNEL
-
-
 class SoundEvent(ABC):
     pass
 
@@ -28,6 +25,7 @@ class MidiNoteEvent(MidiEvent):
 
 class MidiControlEvent(MidiEvent):
     def __init__(self, channel: int, control: int, value: int):
+        super().__init__(channel)
         try:
             assert control in self.value_range
             assert value in self.value_range

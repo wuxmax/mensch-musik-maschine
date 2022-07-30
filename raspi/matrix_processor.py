@@ -3,7 +3,6 @@ import datetime
 import numpy as np
 
 import music_modules
-from raspi.sound_events import MidiControlEvent
 import sound_events
 import midi_controller
 from visualization import Interface
@@ -13,8 +12,8 @@ from utils import load_config
 class MatrixProcessor:    
     def __init__(self, config: dict, logging=True):
         self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
-        self.midi_note_player = midi_controller.MidiNotePlayer(**config['midi_player'])
-        self.midi_control_changer = midi_controller.MidiControlChanger()
+        self.midi_note_player = midi_controller.MidiNotePlayer(**config['midi_controller'], **config['midi_note_player'])
+        self.midi_control_changer = midi_controller.MidiControlChanger(**config['midi_controller'])
 
         self.modules = []
         for module in config['modules'].values():
@@ -33,17 +32,19 @@ class MatrixProcessor:
     def process(self, value_matrix: np.ndarray):
         assert value_matrix.shape == self.matrix_shape
         
-        sound_events = []
+        events = []
         for module in self.modules:
-            sound_events += module.process(value_matrix[module.top:module.bottom,module.left:module.right])
+            events += module.process(value_matrix[module.top:module.bottom,module.left:module.right])
                 
-        for sound_event in sound_events:
+        for sound_event in events:
             # match type(sound_event):
             #     case MidiNoteEvent:
             if type(sound_event) == sound_events.MidiNoteEvent:
                     self.midi_note_player.play_note(sound_event)
             if type(sound_event) == sound_events.MidiControlEvent:
                     self.midi_control_changer.set_value(sound_event)
+
+                    print(sound_event.channel, sound_event.control, sound_event.value)
                     
         # render CLI output
         self.visualization.render()
