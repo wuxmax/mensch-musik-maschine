@@ -27,6 +27,6 @@ if __name__ == "__main__":
         sensor_values = reader.get_value_matrix()
         normalized_values = datpro.normalize(sensor_values)
         matpro.process(normalized_values)
-        # sleep(1)
+        sleep(1)
     
 

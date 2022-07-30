@@ -63,8 +63,6 @@ class MidiControlChanger(MidiController):
             channel=control_event.channel,
             control=control_event.control, 
             value=control_event.value)
-        print(msg)
-
         self.port.send(msg)
 
 if __name__=="__main__":

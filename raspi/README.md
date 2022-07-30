@@ -14,3 +14,6 @@
 1. `cd $HOME/mensch-musik-maschine/raspi`
 2. Start network MIDI service: `sudo raveloxmidi -d -N -c raveloxmidi.conf`
 3. Stat main python script: `python main.py`
+
+## Troubleshooting
+* Check if all I2C devices are detected: `i2cdetect -y 1`

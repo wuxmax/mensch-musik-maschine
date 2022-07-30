@@ -43,8 +43,6 @@ class MatrixProcessor:
                     self.midi_note_player.play_note(sound_event)
             if type(sound_event) == sound_events.MidiControlEvent:
                     self.midi_control_changer.set_value(sound_event)
-
-                    print(sound_event.channel, sound_event.control, sound_event.value)
                     
         # render CLI output
         self.visualization.render()

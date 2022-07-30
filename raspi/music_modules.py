@@ -91,8 +91,6 @@ class SimpleControl(MusicModule):
         super().__init__(setup)
         self.control = sound['control']
 
-        self.counter = 0
-
     def module_process(self, matrix: np.ndarray):
         return [MidiControlEvent(
             channel=self.midi_channel, 

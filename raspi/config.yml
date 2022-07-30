@@ -1,19 +1,19 @@
 matrix_shape: 
-  vertical: 2
+  vertical: 4
   horizontal: 6
 i2c_reader:
-  i2c_device_addresses: [12, 13, 14, 16]
+  i2c_device_addresses: [15, 13, 14, 16]
   n_device_sensors: 6
   sensor_matrix: [
-    [[16, 4], [16, 3], [16, 1], [12, 0], [12, 4], [12, 3]],
-    [[16, 5], [16, 2], [16, 0], [12, 2], [12, 1], [12, 5]],
+    [[16, 4], [16, 3], [16, 1], [15, 0], [15, 4], [15, 3]],
+    [[16, 5], [16, 2], [16, 0], [15, 2], [15, 1], [15, 5]],
     [[13, 0], [13, 1], [13, 4], [14, 1], [14, 0], [14, 2]],
     [[13, 2], [13, 3], [13, 5], [14, 3], [14, 4], [14, 5]]
   ]
 data_preprocessor:
   input_value_range: [0, 1023]
   output_value_range: [0, 127]
-  calibration_period: 10
+  calibration_period: 100
   margin_factor: 0
 midi_controller:
   port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
