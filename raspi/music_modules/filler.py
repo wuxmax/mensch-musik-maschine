@@ -1,5 +1,5 @@
 import numpy as np
-from base import MusicModule
+from .base import MusicModule
 from sound_events import MidiControlEvent
 
 
