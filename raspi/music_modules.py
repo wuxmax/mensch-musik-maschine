@@ -1,5 +1,7 @@
 from abc import ABC
 import datetime
+import time
+
 import numpy as np
 
 from sound_events import MidiNoteEvent, MidiControlEvent
@@ -24,9 +26,9 @@ class MusicModule(ABC):
     
     def process(self, matrix: np.ndarray):
         self.pre_process(matrix)
-        sound_events = self.module_process(matrix)
+        return_events = self.module_process(matrix)
         self.post_process(matrix)
-        return sound_events
+        return return_events
     
     def post_process(self, matrix: np.ndarray):
         self.last_matrix = matrix.copy()
@@ -42,10 +44,10 @@ class Keyboard(MusicModule):
         self.note_mapping: np.ndarray = np.array(sound['note_mapping']).reshape(self.shape[0], self.shape[1])
         
     def module_process(self, matrix: np.ndarray):        
-        sound_events = []
+        return_list = []
         for idx, product in np.ndenumerate(matrix * self.last_matrix):
             if product <= 0 and (product == 0 and matrix[idx] != self.last_matrix[idx]):
-                sound_events.append(
+                return_list.append(
                     MidiNoteEvent(
                         channel=self.midi_channel,
                         note=self.note_mapping[idx],
@@ -53,7 +55,7 @@ class Keyboard(MusicModule):
                     )
                 )
         # print(f"keyboard: {sound_events}")
-        return sound_events
+        return return_list
         
 
 class Sequencer(MusicModule):
@@ -108,7 +110,7 @@ class MiniSequencer(MusicModule):
 
         # print(f"sequencer: {return_list}")
         return return_list
-        
+
 
 class SimpleControl(MusicModule):
     def __init__(self, setup, sound):
@@ -116,7 +118,30 @@ class SimpleControl(MusicModule):
         self.control = sound['control']
 
     def module_process(self, matrix: np.ndarray):
-        return MidiControlEvent(
+        return [MidiControlEvent(
+            channel=self.midi_channel,
+            control=self.control,
+            value=abs(int(np.mean(matrix))))]
+
+
+class MidiTester(MusicModule):
+    def __init__(self, setup, sound):
+        super().__init__(setup)
+        self.control = sound['control']
+
+        self.counter = 0
+
+    def module_process(self, matrix: np.ndarray):
+        time.sleep(0.2)
+
+        self.counter += 1
+        if self.counter == 128:
+            self.counter = 0
+
+        return [MidiControlEvent(
             channel=self.midi_channel, 
             control=self.control, 
-            value=np.mean(matrix))
+            value=self.counter)]
+
+
+

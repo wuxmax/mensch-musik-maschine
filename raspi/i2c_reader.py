@@ -4,6 +4,8 @@ from typing import Union
 from smbus2 import SMBus
 import numpy as np
 
+from utils import load_config
+
 class I2CReader:
     smbus = SMBus(1)
     
@@ -17,7 +19,7 @@ class I2CReader:
         try:
             assert matrix_shape == sensor_matrix_shape 
         except:
-            print(f"Matrix shape {matrix_shape} does not equal sensor matrix shape {sensor_matrix_shape}!")
+            print(f"Matrix shape {matrix_shape} does not equal sensor matrix shape {sensor_matrix_shape}")
             exit(1)
 
         self.sensor_values: dict[int, list[int]] = {i2c_address: [0] * self.n_device_sensors for i2c_address in self.i2c_addresses }
@@ -49,7 +51,7 @@ class I2CReader:
 
 
 if __name__ == "__main__":
-    i2c_reader = I2CReader()
+    i2c_reader = I2CReader(load_config())
     np.set_printoptions(formatter={'float_kind':"{:.1f}".format})
     
     while True:

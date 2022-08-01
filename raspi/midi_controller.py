@@ -4,16 +4,16 @@ from datetime import datetime
 
 import mido
 
-from sound_events import MidiNoteEvent
+from sound_events import MidiNoteEvent, MidiControlEvent
 
 
 class MidiController:
     def __init__(self, port: str):
-        self.port = mido.open_output(port)  
+        self.port = mido.open_output(port) 
     
 class MidiNotePlayer(MidiController):
-    def __init__(self, *setup, n_voices: int):
-        super().__init__(*setup)
+    def __init__(self, port: str, n_voices: int):
+        super().__init__(port)
         self.reset()
         
         self.current_notes = [-1] * n_voices
@@ -27,7 +27,7 @@ class MidiNotePlayer(MidiController):
         self.current_notes[voice] = note_event.note
         
         msg = mido.Message('note_on', 
-            channel=self.channel, 
+            channel=note_event.channel, 
             note=note_event.note,
             velocity=note_event.velocity, 
             time=1)  # we do not really know, what time does
@@ -54,11 +54,15 @@ class MidiNotePlayer(MidiController):
             self.stop_note(note)
 
 class MidiControlChanger(MidiController):
-    def __init__(self, port: str, n_voices: int):
+    def __init__(self, port: str):
         super().__init__(port)
 
-    def set_value(self, control: int, value: int):
-        msg = mido.Message('control_change', control=control, value=value)#
+    def set_value(self, control_event: MidiControlEvent):
+        msg = mido.Message(
+            'control_change',
+            channel=control_event.channel,
+            control=control_event.control, 
+            value=control_event.value)
         self.port.send(msg)
 
 if __name__=="__main__":
