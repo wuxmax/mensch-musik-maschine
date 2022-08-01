@@ -14,7 +14,7 @@ data_preprocessor:
   input_value_range: [0, 1023]
   output_value_range: [0, 127]
   calibration_period: 500
-  margin_factor: 1.5
+  margin_factor: 1.1
 midi_controller:
   port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
   # port: 'Circuit MIDI 1'
@@ -22,40 +22,15 @@ midi_note_player:
   n_voices: 1  
 modules:
   filler:
-    module: Filler
+    module: Fader
     setup:
-      name: filler
+      name: fader
       midi_channel: 2
-      top: 0
-      left: 4
-      bottom: 1
+      top: 2
+      left: 2
+      bottom: 3
       right: 6
     sound: 
-      control: 1
-      fill_time: 5
-      empty_time: 1
-  # keyboard:
-  #   module: Keyboard
-  #   setup:
-  #     name: keyboard1
-  #     midi_channel: 0
-  #     top: 0
-  #     left: 0
-  #     bottom: 1
-  #     right: 6
-  #   sound:
-  #     note_mapping: [31, 33, 35, 38, 41, 43]
-  #     note_duration: 1.0
-  # sequencer:
-  #   module: Sequencer
-  #   setup:
-  #     name: sequencer1
-  #     midi_channel: 1
-  #     top: 1
-  #     left: 0
-  #     bottom: 2
-  #     right: 6
-  #   sound:
-  #     bpm: 120
-  #     midi_note: 35
-  #     note_duration: 0.2
+      control: 11
+      buffer_size: 5
+
