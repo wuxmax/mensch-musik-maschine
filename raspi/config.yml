@@ -32,6 +32,8 @@ modules:
       right: 3
     sound: 
       control: 1
+      fill_time: 5
+      empty_time: 1
   # keyboard:
   #   module: Keyboard
   #   setup:

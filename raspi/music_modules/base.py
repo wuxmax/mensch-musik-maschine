@@ -1,7 +1,7 @@
 from abc import ABC
 
 import numpy as np
-import datetime
+import time
 
 class MusicModule(ABC):
     def __init__(self, setup: dict):
@@ -15,7 +15,7 @@ class MusicModule(ABC):
         self.last_matrix: np.ndarray = np.zeros(self.shape)
 
         # parameter
-        self.last_processing_timestamp = datetime.datetime.now()
+        self.last_processing_timestamp = time.time()
         self.time_since_last_processing = 0
         self.value_count = 1
         self.positive_value_count = 0
@@ -27,7 +27,7 @@ class MusicModule(ABC):
             assert matrix.shape == self.shape
         except AssertionError:
             print(f"AssertionError: matrix shape: {matrix.shape} != module shape: {self.shape}")
-        self.time_since_last_processing = datetime.datetime.now() - self.last_processing_timestamp
+        self.time_since_last_processing = time.time() - self.last_processing_timestamp
         self.value_count = 1
         self.positive_value_count = (matrix > 0).sum()
         self.negative_value_count = (matrix < 0).sum()

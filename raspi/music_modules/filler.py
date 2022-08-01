@@ -25,7 +25,7 @@ class Filler(MusicModule):
         return [MidiControlEvent(
             channel=self.midi_channel,
             control=self.control,
-            value=self.value)]
+            value=int(self.value))]
 
 
 
