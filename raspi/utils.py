@@ -10,3 +10,9 @@ def load_config(yaml_file: str = 'config.yml'):
             print(exc)
             exit(1)
     return config
+
+
+def parse_arguments(args: list[str]) -> bool:
+    if len(args) > 1 and args[1] == 'sleep':
+        return True
+    return False

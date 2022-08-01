@@ -92,10 +92,16 @@ class SimpleControl(MusicModule):
         self.control = sound['control']
 
     def module_process(self, matrix: np.ndarray):
+
+        value = np.mean(matrix[matrix > 0])
+        if not value or np.isnan(value):
+            value = 0
+        value = int(value)
+        
         return [MidiControlEvent(
             channel=self.midi_channel, 
             control=self.control, 
-            value=abs(int(np.mean(matrix))))]
+            value=value)]
         
 
 class MidiTester(MusicModule):

@@ -56,7 +56,7 @@ if __name__ == "__main__":
     
     while True:
         print(i2c_reader.get_value_matrix())
-        sleep(3)
+        sleep(1)
     
     # while True:
     #     print(i2c_reader.read(11))
