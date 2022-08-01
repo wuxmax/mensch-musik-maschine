@@ -9,15 +9,15 @@ from i2c_reader import I2CReader
 from utils import load_config, parse_arguments
 
 
-CONFIG_FILE = "config.yml"
-
-config = load_config(CONFIG_FILE)
-reader = I2CReader(config)
-datpro = MatrixDataPreprocessor(config)
-matpro = MatrixProcessor(config)
-
+# CONFIG_FILE = "config.yml"
+CONFIG_FILE = "config_fader.yml"
 
 if __name__ == "__main__":
+    config = load_config(CONFIG_FILE)
+    reader = I2CReader(config)
+    datpro = MatrixDataPreprocessor(config)
+    matpro = MatrixProcessor(config)
+
     sleepy = parse_arguments(sys.argv)
 
     print("Calibrating...")

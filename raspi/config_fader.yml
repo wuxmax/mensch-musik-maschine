@@ -1,0 +1,36 @@
+matrix_shape: 
+  vertical: 4
+  horizontal: 6
+i2c_reader:
+  i2c_device_addresses: [15, 13, 14, 11]
+  n_device_sensors: 6
+  sensor_matrix: [
+    [[11, 4], [11, 3], [11, 1], [15, 0], [15, 4], [15, 3]],
+    [[11, 5], [11, 2], [11, 0], [15, 2], [15, 1], [15, 5]],
+    [[13, 0], [13, 1], [13, 4], [14, 1], [14, 0], [14, 2]],
+    [[13, 2], [13, 3], [13, 5], [14, 3], [14, 4], [14, 5]]
+  ]
+data_preprocessor:
+  input_value_range: [0, 1023]
+  output_value_range: [0, 127]
+  calibration_period: 500
+  margin_factor: 1.1
+midi_controller:
+  port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
+  # port: 'Circuit MIDI 1'
+midi_note_player:
+  n_voices: 1  
+modules:
+  filler:
+    module: Fader
+    setup:
+      name: fader
+      midi_channel: 2
+      top: 2
+      left: 2
+      bottom: 3
+      right: 6
+    sound: 
+      control: 11
+      buffer_size: 5
+
