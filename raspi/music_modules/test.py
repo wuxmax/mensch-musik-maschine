@@ -1,7 +1,9 @@
 import time
 
-from base import MusicModule
-from raspi.sound_events import MidiControlEvent
+from sound_events import MidiControlEvent
+from .base import MusicModule
+
+import numpy as np
 
 class MidiTester(MusicModule):
     def __init__(self, setup, sound):

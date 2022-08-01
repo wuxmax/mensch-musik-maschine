@@ -1,7 +1,7 @@
 import numpy as np
 
-from base import MusicModule
-from raspi.sound_events import MidiControlEvent
+from sound_events import MidiControlEvent
+from .base import MusicModule
 
 class SimpleControl(MusicModule):
     def __init__(self, setup, sound):

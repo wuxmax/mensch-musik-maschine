@@ -2,8 +2,8 @@ import datetime
 
 import numpy as np
 
-from base import MusicModule
-from raspi.sound_events import MidiNoteEvent
+from sound_events import MidiNoteEvent
+from .base import MusicModule
 
 class Sequencer(MusicModule):
     def __init__(self, setup, sound):

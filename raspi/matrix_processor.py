@@ -4,6 +4,7 @@ import numpy as np
 
 import sound_events
 import midi_controller
+import music_modules
 from visualization import Interface
 from utils import load_config
 
