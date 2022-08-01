@@ -22,16 +22,28 @@ midi_note_player:
   n_voices: 1  
 modules:
   simple_control:
-    module: SimpleControl
-    setup:
-      name: simplecontrol1
-      midi_channel: 2
-      top: 0
-      left: 0
-      bottom: 4
-      right: 6
-    sound: 
-      control: 1
+      module: Fader
+      setup:
+        name: fader
+        midi_channel: 2
+        top: 0
+        left: 0
+        bottom: 1
+        right: 6
+      sound: 
+        control: 1
+        buffer_size: 5
+  # simple_control:
+  #   module: SimpleControl
+  #   setup:
+  #     name: simplecontrol1
+  #     midi_channel: 2
+  #     top: 0
+  #     left: 0
+  #     bottom: 4
+  #     right: 6
+  #   sound: 
+  #     control: 1
   # keyboard:
   #   module: Keyboard
   #   setup:
