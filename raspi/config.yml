@@ -21,15 +21,15 @@ midi_controller:
 midi_note_player:
   n_voices: 1  
 modules:
-  simple_control:
-    module: SimpleControl
+  filler:
+    module: Filler
     setup:
-      name: simplecontrol1
+      name: filler
       midi_channel: 2
       top: 0
       left: 0
-      bottom: 4
-      right: 6
+      bottom: 1
+      right: 3
     sound: 
       control: 1
   # keyboard:
