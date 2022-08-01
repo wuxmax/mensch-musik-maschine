@@ -2,7 +2,6 @@ import datetime
 
 import numpy as np
 
-import music_modules
 import sound_events
 import midi_controller
 from visualization import Interface
