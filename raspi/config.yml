@@ -27,9 +27,9 @@ modules:
       name: filler
       midi_channel: 2
       top: 0
-      left: 0
+      left: 4
       bottom: 1
-      right: 3
+      right: 6
     sound: 
       control: 1
       fill_time: 5
