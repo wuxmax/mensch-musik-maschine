@@ -41,6 +41,7 @@ class MusicModule(ABC):
     
     def post_process(self, matrix: np.ndarray):
         self.last_matrix = matrix.copy()
+        self.last_processing_timestamp = time.time()
 
     def get_values(self) -> np.ndarray:
         return self.last_matrix
