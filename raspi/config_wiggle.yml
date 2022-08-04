@@ -14,7 +14,7 @@ data_preprocessor:
   input_value_range: [0, 1023]
   output_value_range: [0, 127]
   calibration_period: 500
-  margin_factor: 1.1
+  margin_factor: 2
 midi_controller:
   port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
   # port: 'Circuit MIDI 1'
