@@ -51,7 +51,8 @@ class Wiggle(MusicModule):
         if target > self.activation:
             increase = target/self.delta_t
         else:
-            increase = (target - self.activation)/self.delta_t
+            if self.delta_t > 1:
+                increase = (target - self.activation)/(self.delta_t/2)
             
         if increase > 0 and increase > target - self.activation or increase < 0 and increase < target - self.activation:
             increase = target - self.activation
