@@ -1,4 +1,4 @@
-import datetime
+import time
 
 import numpy as np
 
@@ -12,14 +12,13 @@ class Wiggle(MusicModule):
         self.control = sound['control']
         self.max_freq = sound['max_freq'] * self.shape[0] * self.shape[1]
         self.history = []
-        self.timer = datetime.datetime.now()
+        self.timer = time.time()
         self.activation = None
-        self.threshold = sound['threshold']
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
         
-        if datetime.datetime.now() - self.timer > 1:
+        if time.time() - self.timer > 1:
             self.timer += 1
             self.activation = self.calculate_activation()
         
@@ -38,4 +37,6 @@ class Wiggle(MusicModule):
                 switches += ((self.history[idx-1] < 0) & (val >= 0)).sum()
                 switches += ((self.history[idx-1] == 0) & (val < 0)).sum()
                 switches += ((self.history[idx-1] == 0) & (val > 0)).sum()
-        return switches/self.max_freq * 127 if switches < self.max_freq else 127
+        print(switches)
+        self.history = []
+        return int(switches/self.max_freq * 127) if switches < self.max_freq else 127
