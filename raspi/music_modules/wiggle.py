@@ -16,7 +16,7 @@ class Wiggle(MusicModule):
         self.delta_t = sound['delta_t'] * 1/sound['time_step_size']
         self.history = []
         self.timer = time.time()
-        self.activation = None
+        self.activation = 0
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
@@ -49,12 +49,17 @@ class Wiggle(MusicModule):
         
 
         if target > self.activation:
-            increase = target/self.time_step_size
+            increase = target/self.delta_t
         else:
-            increase = (target - self.activation)/self.time_step_size
+            increase = (target - self.activation)/self.delta_t
             
         if increase > 0 and increase > target - self.activation or increase < 0 and increase < target - self.activation:
             increase = target - self.activation
 
 
+        print(f"Switches: {switches}")
+        print(f"Target: {target}")
+        print(f"Old Activation: {self.activation}")
+        print(f"Increase: {increase}")
+        print(f"New Activation: {self.activation + increase}")
         return min(int(self.activation + increase), 127)

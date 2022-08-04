@@ -10,6 +10,7 @@ class MatrixDataPreprocessor:
         self.output_value_range = config['data_preprocessor']['output_value_range']
         self.input_value_range = config['data_preprocessor']['input_value_range']
         self.margin_factor = config['data_preprocessor']['margin_factor']
+        self.minimal_margin = config['data_preprocessor']['minimal_margin']
         self.output_range = self.output_value_range[-1] - self.output_value_range[0]
         
         # last axis indices: 0 = min, 1 = max
@@ -27,8 +28,12 @@ class MatrixDataPreprocessor:
         self.calibration_values[:,:,1] = reference_values_stacked.max(axis=2)
 
         margin_values = (self.calibration_values[:,:,1] - self.calibration_values[:,:,0]) * self.margin_factor / 2
-        self.calibration_values[:,:,0] = np.maximum(np.full(self.matrix_shape, self.input_value_range[0]),  self.calibration_values[:,:,0] - margin_values)
-        self.calibration_values[:,:,1] = np.minimum(np.full(self.matrix_shape, self.input_value_range[-1]),  self.calibration_values[:,:,1] + margin_values)
+        margin_values = np.maximum(self.minimal_margin, margin_values)
+
+        self.calibration_values[:,:,0] = np.maximum(self.input_value_range[0],  self.calibration_values[:,:,0] - margin_values)
+        self.calibration_values[:,:,1] = np.minimum(self.input_value_range[-1], self.calibration_values[:,:,1] + margin_values)
+        # self.calibration_values[:,:,0] = np.maximum(np.full(self.matrix_shape, self.input_value_range[0]),  self.calibration_values[:,:,0] - margin_values)
+        # self.calibration_values[:,:,1] = np.minimum(np.full(self.matrix_shape, self.input_value_range[-1]),  self.calibration_values[:,:,1] + margin_values)
 
         self.normalization_values = self.calibration_values.copy()
 
