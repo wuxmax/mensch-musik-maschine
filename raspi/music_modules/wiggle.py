@@ -1,3 +1,4 @@
+import math
 import time
 
 import numpy as np
@@ -11,6 +12,8 @@ class Wiggle(MusicModule):
         super().__init__(setup)
         self.control = sound['control']
         self.max_freq = sound['max_freq'] * self.shape[0] * self.shape[1]
+        self.time_step_size = sound['time_step_size']
+        self.delta_t = sound['delta_t'] * 1/sound['time_step_size']
         self.history = []
         self.timer = time.time()
         self.activation = None
@@ -18,8 +21,8 @@ class Wiggle(MusicModule):
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
         
-        if time.time() - self.timer > 1:
-            self.timer += 1
+        if time.time() - self.timer > self.time_step_size:
+            self.timer += self.time_step_size
             self.activation = self.calculate_activation()
         
             return [MidiControlEvent(
@@ -37,6 +40,21 @@ class Wiggle(MusicModule):
                 switches += ((self.history[idx-1] < 0) & (val >= 0)).sum()
                 switches += ((self.history[idx-1] == 0) & (val < 0)).sum()
                 switches += ((self.history[idx-1] == 0) & (val > 0)).sum()
-        print(switches)
         self.history = []
-        return int(switches/self.max_freq * 127) if switches < self.max_freq else 127
+
+        target = 127 * (switches/self.max_freq)
+        
+        if self.activation == target:
+            return self.activation
+        
+
+        if target > self.activation:
+            increase = target/self.time_step_size
+        else:
+            increase = (target - self.activation)/self.time_step_size
+            
+        if increase > 0 and increase > target - self.activation or increase < 0 and increase < target - self.activation:
+            increase = target - self.activation
+
+
+        return min(int(self.activation + increase), 127)
