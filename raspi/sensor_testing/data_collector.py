@@ -10,7 +10,7 @@ from i2c_reader import I2CReader
 from utils import load_config
 
 
-N_READINGS = 100
+N_READINGS = 1000
 
 
 def collect_data(reader: I2CReader):
