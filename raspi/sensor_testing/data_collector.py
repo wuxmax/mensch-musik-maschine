@@ -10,7 +10,7 @@ from i2c_reader import I2CReader
 from utils import load_config
 
 
-N_READINGS = 1000
+N_READINGS = 100
 
 
 def collect_data(reader: I2CReader):
@@ -22,9 +22,9 @@ def collect_data(reader: I2CReader):
 
     return data
 
-
 def write_file(data):
-    with open('test_data/' + 'data_' + str(datetime.now()), 'wb') as f:
+    ts_str = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    with open("test_data/" + f"data_{ts_str}.pkl", 'wb') as f:
         pickle.dump(data, f)
 
 
