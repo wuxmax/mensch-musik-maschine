@@ -19,11 +19,6 @@ if __name__ == "__main__":
     matpro = MatrixProcessor(config)
 
     sleepy = parse_arguments(sys.argv)
-
-    print("Calibrating...")
-    reference_values = [reader.get_value_matrix() for _ in tqdm(range(config['data_preprocessor']['calibration_period']))]
-    datpro.calibrate(reference_values)
-    print("Calibration done!")
     
     while True:
         sensor_values = reader.get_value_matrix()
