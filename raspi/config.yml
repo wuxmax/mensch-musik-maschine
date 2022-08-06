@@ -11,10 +11,11 @@ i2c_reader:
     [[13, 2], [13, 3], [13, 5], [14, 3], [14, 4], [14, 5]]
   ]
 data_preprocessor:
-  input_value_range: [0, 1023]
-  output_value_range: [0, 127]
+  # input_value_range: [0, 1023]
+  # output_value_range: [0, 127]
   calibration_period: 500
-  margin_factor: 1.5
+  # margin_factor: 1.5
+  n_clusters: 2
 midi_controller:
   port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
   # port: 'Circuit MIDI 1'

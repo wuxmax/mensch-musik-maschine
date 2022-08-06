@@ -6,10 +6,9 @@ import numpy as np
 
 from utils import load_config
 
-class I2CReader:
-    smbus = SMBus(1)
-    
+class I2CReader:    
     def __init__(self, config: dict):
+        self.smbus = SMBus(1)
         self.i2c_addresses: list[int] = config['i2c_reader']['i2c_device_addresses']
         self.n_device_sensors: int = config['i2c_reader']['n_device_sensors']
         self.sensor_matrix: list[list[tuple[int, int]]] = config['i2c_reader']['sensor_matrix']
