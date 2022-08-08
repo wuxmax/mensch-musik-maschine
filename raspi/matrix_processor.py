@@ -10,7 +10,7 @@ from utils import load_config
 
 
 class MatrixProcessor:    
-    def __init__(self, config: dict, logging=True):
+    def __init__(self, config: dict, printing=True, logging=False):
         self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
         self.midi_note_player = midi_controller.MidiNotePlayer(**config['midi_controller'], **config['midi_note_player'])
         self.midi_control_changer = midi_controller.MidiControlChanger(**config['midi_controller'])
@@ -23,7 +23,9 @@ class MatrixProcessor:
         if self.logging:
             self.log_file = 'logs/log_' + datetime.datetime.now().strftime('%d%m%Y-%H:%M:%S') + '.csv'
 
-        self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
+        self.printing = printing
+        if self.printing:
+            self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
@@ -45,7 +47,8 @@ class MatrixProcessor:
                     self.midi_control_changer.set_value(sound_event)
                     
         # render CLI output
-        self.visualization.render()
+        if self.printing:
+            self.visualization.render()
 
         # logging
         if self.logging:

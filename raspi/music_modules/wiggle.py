@@ -32,21 +32,25 @@ class Wiggle(MusicModule):
         return []
 
     def calculate_activation(self):
+        print(f"Activation: {self.activation}")
+        
         switches = 0
         for idx, val in enumerate(self.history):
             if idx > 0:
-                switches += ((self.history[idx-1] > 0) & (val <= 0)).sum()
-                switches += ((self.history[idx-1] < 0) & (val >= 0)).sum()
-                switches += ((self.history[idx-1] == 0) & (val < 0)).sum()
-                switches += ((self.history[idx-1] == 0) & (val > 0)).sum()
+                # switches += ((self.history[idx-1] > 0) & (val <= 0)).sum()
+                # switches += ((self.history[idx-1] < 0) & (val >= 0)).sum()
+                # switches += ((self.history[idx-1] == 0) & (val < 0)).sum()
+                # switches += ((self.history[idx-1] == 0) & (val > 0)).sum()
+                switches += (self.history[idx-1] != val).sum()
         self.history = []
 
+        print(f"Switches: {switches}")
+        
         target = 127 * (switches/self.max_freq)
         
         if self.activation == target:
             return self.activation
         
-
         if target > self.activation:
             increase = target/self.delta_t
         else:
@@ -56,10 +60,10 @@ class Wiggle(MusicModule):
         if increase > 0 and increase > target - self.activation or increase < 0 and increase < target - self.activation:
             increase = target - self.activation
 
-
-        print(f"Switches: {switches}")
-        print(f"Target: {target}")
-        print(f"Old Activation: {self.activation}")
-        print(f"Increase: {increase}")
-        print(f"New Activation: {self.activation + increase}")
+        # print("---")
+        # print(f"Switches: {switches}")
+        # print(f"Target: {target}")
+        # print(f"Old Activation: {self.activation}")
+        # print(f"Increase: {increase}")
+        # print(f"New Activation: {self.activation + increase}")
         return min(int(self.activation + increase), 127)

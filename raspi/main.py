@@ -16,7 +16,7 @@ if __name__ == "__main__":
     config = load_config(CONFIG_FILE)
     reader = I2CReader(config)
     datpro = MatrixDataPreprocessor(config)
-    matpro = MatrixProcessor(config)
+    matpro = MatrixProcessor(config, printing=False)
 
     sleepy = parse_arguments(sys.argv)
     
