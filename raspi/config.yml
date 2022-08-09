@@ -12,6 +12,7 @@ data_preprocessor:
   calibration_period: 2000
   recalibration_period: 2000
   recalibration_window: 5000
+  recalibration_cluster_center_weight: 1
   n_clusters: 2
   error_threshold: 5
 midi_controller:

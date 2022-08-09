@@ -13,6 +13,7 @@ class MatrixDataPreprocessor:
         self.calibration_period = config['data_preprocessor']['calibration_period']
         self.recalibration_period = config['data_preprocessor']['recalibration_period']
         self.recalibration_window = config['data_preprocessor']['recalibration_window']
+        self.recalibration_cluster_center_weight = config['data_preprocessor']['recalibration_cluster_center_weight']
         self.feature_disabled = np.zeros(self.matrix_shape)  # store if feature was 0 in initial calibration
 
         self.n_clusters = config['data_preprocessor']['n_clusters']
@@ -41,9 +42,15 @@ class MatrixDataPreprocessor:
         else:  # recalibration
             self.value_history_stacked = np.concatenate([self.value_history_stacked] + [np.stack(self.value_history, axis=2)], axis=2)
             values_stacked = self.value_history_stacked[:,:,:-self.recalibration_window]
-            # TODO: add cluster centers proportionally to values_stacked
-            # cluster centers are (2,) shape arrays, need to be in matrix_shape
-            # unravel index loop --> see below 
+            
+            # add cluster centers proportionally to values_stacked
+            cluster_centers = np.empty(*self.matrix_shape, self.n_clusters)
+            for flat_idx, predictor in enumerate(self.cluster_predictors):
+                matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
+                cluster_centers[matrix_idx[0], matrix_idx[1], :] = predictor.cluster_centers_
+
+            cluster_center_repeats = int(self.recalibration_window / self.n_clusters * self.recalibration_cluster_center_weight)
+            values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)])
 
         # set all normalized values to -1 (error value), so error readings have a value also
         normalized_values_stacked = np.full((*self.matrix_shape, values_stacked.shape[-1]), -1)
