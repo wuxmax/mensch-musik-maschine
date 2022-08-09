@@ -41,16 +41,16 @@ class MatrixDataPreprocessor:
             values_stacked = self.value_history_stacked
         else:  # recalibration
             self.value_history_stacked = np.concatenate([self.value_history_stacked] + [np.stack(self.value_history, axis=2)], axis=2)
-            values_stacked = self.value_history_stacked[:,:,:-self.recalibration_window]
-            
+            values_stacked = self.value_history_stacked[:,:,-self.recalibration_window:]
+
             # add cluster centers proportionally to values_stacked
-            cluster_centers = np.empty(*self.matrix_shape, self.n_clusters)
+            cluster_centers = np.empty((*self.matrix_shape, self.n_clusters))
             for flat_idx, predictor in enumerate(self.cluster_predictors):
                 matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
-                cluster_centers[matrix_idx[0], matrix_idx[1], :] = predictor.cluster_centers_
+                cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
 
             cluster_center_repeats = int(self.recalibration_window / self.n_clusters * self.recalibration_cluster_center_weight)
-            values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)])
+            values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)], axis=2)
 
         # set all normalized values to -1 (error value), so error readings have a value also
         normalized_values_stacked = np.full((*self.matrix_shape, values_stacked.shape[-1]), -1)
