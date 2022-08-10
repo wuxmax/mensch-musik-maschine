@@ -1,9 +1,9 @@
-# numpy must be installed via 'apt-get install python3-numpy'
+numpy
 smbus2
 mido
 rtmidi
 tabulate
 pyyaml
-python-rtmidi  # instead of
+python-rtmidi
 click
 tqdm

@@ -1,7 +1,3 @@
-from collections import deque
-from itertools import groupby
-from math import copysign
-
 import numpy as np
 
 from sound_events import MidiControlEvent
@@ -22,58 +18,3 @@ class SimpleControl(MusicModule):
             channel=self.midi_channel,
             control=self.control,
             value=value)]
-
-
-class Fader(MusicModule):
-    def __init__(self, setup, sound):
-        super().__init__(setup)
-        self.control = sound['control']
-        self.buffer_size = sound['buffer_size']
-        self.pos_buffer = deque([], maxlen=self.buffer_size)
-        self.last_midi_value = None
-
-    
-    def module_process(self, matrix: np.ndarray) -> list[MidiControlEvent]:
-        # get matrix postion with highest value
-        position = np.argmin(matrix)
-        self.pos_buffer.append(position)
-        #print(position)
-        
-        if not len(self.pos_buffer) == self.buffer_size:
-            return []
-
-        if all_equal(self.pos_buffer):
-            midi_value = self.get_midi_value(position)
-            if not self.last_midi_value:
-                self.last_midi_value = midi_value
-            direction = int(copysign(1, midi_value - self.last_midi_value))
-
-            return_events = [MidiControlEvent(
-                channel=self.midi_channel,
-                control=self.control,
-                value=value) for value in range(self.last_midi_value, midi_value, direction)]
-            
-            self.last_midi_value = midi_value
-            return return_events
-        
-        return []
-
-    def get_midi_value(self, position: float) -> int:
-        # Figure out how 'wide' each range is
-        fader_range_min = 0
-        fader_range_max = self.shape[1]
-        fader_range = fader_range_max - fader_range_min
-        midi_range_min = MidiControlEvent.value_range[0]
-        midi_range_max = MidiControlEvent.value_range[-1] 
-        midi_range = midi_range_max - midi_range_min
-
-        # Convert the left range into a 0-1 range (float)
-        value_scaled = float(position - fader_range_min) / float(fader_range)
-
-        # Convert the 0-1 range into a value in the right range.
-        return int(midi_range_min + (value_scaled * midi_range))
-
-
-def all_equal(iterable):
-    g = groupby(iterable)
-    return next(g, True) and not next(g, False)

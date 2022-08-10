@@ -7,3 +7,5 @@ pyyaml
 python-rtmidi
 click
 tqdm
+pandas
+matplotlib
