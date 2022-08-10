@@ -50,7 +50,8 @@ class I2CReader:
 
 
 if __name__ == "__main__":
-    i2c_reader = I2CReader(load_config())
+    from main import CONFIG_FILE
+    i2c_reader = I2CReader(load_config(CONFIG_FILE))
     np.set_printoptions(formatter={'float_kind':"{:.1f}".format})
     
     while True:
