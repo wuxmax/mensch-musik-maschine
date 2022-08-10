@@ -1,14 +1,14 @@
 matrix_shape: 
   vertical: 1
-  horizontal: 12
+  horizontal: 11
 i2c_reader:
   i2c_device_addresses: [13, 14]
   n_device_sensors: 6  # 6, 5, 4, 3
   sensor_matrix: [
-    [[13, 2], [13, 1], [13, 5], [13, 3], [13, 0], [13, 4], [14, 0], [14, 1], [14, 2], [14, 3], [14, 4], [14, 5]],
+    [[13, 2], [13, 1], [13, 5], [13, 3], [13, 0], [13, 4], [14, 0], [14, 1], [14, 2], [14, 3], [14, 4]],
   ]
 data_preprocessor:
-  calibration_period: 2000
+  calibration_period: 5000
   recalibration_period: 5000
   recalibration_window: 5000
   # calibration_period: 5
@@ -30,7 +30,7 @@ modules:
       top: 0
       left: 0
       bottom: 1
-      right: 12
+      right: 10
     sound: 
       control_left: 13
       control_right: 14

@@ -1,12 +1,13 @@
 matrix_shape: 
-  vertical: 2
-  horizontal: 2
+  vertical: 3
+  horizontal: 11
 i2c_reader:
-  i2c_device_addresses: [11]
-  n_device_sensors: 6  # 6, 5, 4, 3
+  i2c_device_addresses: [11, 13, 14]
+  n_device_sensors: 6
   sensor_matrix: [
-    [[11, 3], [11, 2]],
-    [[11, 4], [11, 5]]
+    [[13, 2], [13, 1], [13, 5], [13, 3], [13, 0], [13, 4], [14, 0], [14, 1], [14, 2], [14, 3], [14, 4]],
+    [[11, 3], [11, 2], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0]],
+    [[11, 4], [11, 5], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0], [11, 0]],
   ]
 data_preprocessor:
   calibration_period: 5000
@@ -23,14 +24,29 @@ midi_controller:
 midi_note_player:
   n_voices: 1  
 modules:
+  fader:
+    module: Fader
+    setup:
+      name: fader
+      midi_channel: 2
+      top: 0
+      left: 0
+      bottom: 1
+      right: 10
+    sound: 
+      control_left: 13
+      control_right: 14
+      window_size_move: 3
+      window_size_drop: 8
+      error_threshold: 0
   wiggle:
     module: Wiggle
     setup:
       name: wiggle
       midi_channel: 2
-      top: 0
+      top: 1
       left: 0
-      bottom: 2
+      bottom: 3
       right: 2
     sound: 
       control: 11

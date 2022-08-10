@@ -29,9 +29,9 @@ class Fader(MusicModule):
         position = self.single_shadow_pos(matrix)
         self.position_history.append(position)
 
-        print(f"{position=}")
-        print(f"{self.position_history=}")
-        print(f"{self.fader_side=}")
+        # print(f"{position=}")
+        # print(f"{self.position_history=}")
+        # print(f"{self.fader_side=}")
 
         # wait for position history to be filled
         if not len(self.position_history) == self.window_size_drop:
@@ -40,7 +40,7 @@ class Fader(MusicModule):
         # if there is no shadow for the entire window size, reset both faders
         if self.fader_side and position is None and all_equal(self.position_history):
             self.fader_side = None
-            return self.get_return_values(0, self.control_left) + self.get_return_values(0, self.control_right)
+            return self.get_return_values(127, self.control_left) + self.get_return_values(0, self.control_right)
             
         # check if all positions in position history are equal (cant slice a deque)
         if not all_equal([self.position_history[i] for i in range(self.window_size_drop - self.window_size_move, self.window_size_drop)]):
@@ -57,10 +57,10 @@ class Fader(MusicModule):
             self.fader_side = 'right'
     
         if self.fader_side == 'left':
-            midi_value = self.get_midi_value(position)
+            midi_value = self.get_midi_value(self.shape[1] - position)  # reversed because of effect
             return_values = self.get_return_values(midi_value, self.control_left)
         else:
-            midi_value = self.get_midi_value(self.shape[1] - position)
+            midi_value = self.get_midi_value(self.shape[1] - position)  # reversed because of direction
             return_values = self.get_return_values(midi_value, self.control_right)
 
         # print(f"{position=}")
