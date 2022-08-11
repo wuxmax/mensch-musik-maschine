@@ -17,8 +17,8 @@ class Interface():
     def render(self) -> None:
         activations, names = self.get_activations_and_names()
         vertical, horizontal = self.shape
-        assert activations.shape[1] == horizontal
-        assert len(names[0]) == horizontal
+        # assert activations.shape[1] == horizontal
+        # assert len(names[0]) == horizontal
         
         table = []
         for i in range(vertical):
@@ -36,14 +36,16 @@ class Interface():
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
-        activations = np.zeros(self.shape)
+        activations = np.zeros(self.shape[0] * self.shape[1])
         names = [[None for i in range(self.shape[1])] for i in range(self.shape[0])]
+        values = 0
         for module in self.modules:
             # get activation values for sensors in module
             module_activations = module.get_values()
             for i in range(module_activations.shape[0]):
                 for j in range(module_activations.shape[1]):
-                    activations[i+module.top][j+module.left] = module_activations[i][j]
+                    activations[values] = module_activations[i][j]
+                    values += 1
             # save name of module
             names[module.top][module.left] = module.name
         return activations, names
