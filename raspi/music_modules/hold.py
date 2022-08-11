@@ -42,8 +42,8 @@ class Hold(MusicModule):
         shadow = 0
         light = 0
         for idx, val in enumerate(self.history):
-            light += (self.history[idx] == 1).sum()
-            shadow += (self.history[idx] == 0).sum()
+            light += (self.history[idx] == 0).sum()
+            shadow += (self.history[idx] == 1).sum()
         self.history = []
 
         target = 127 * light/(shadow + light)
