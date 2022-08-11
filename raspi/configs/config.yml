@@ -11,8 +11,8 @@ i2c_reader:
   ]
 data_preprocessor:
   calibration_period: 50
-  recalibration_period: 50
-  recalibration_window: 50
+  recalibration_period: 5000
+  recalibration_window: 5000
   # calibration_period: 5
   # recalibration_period: 5
   # recalibration_window: 5
