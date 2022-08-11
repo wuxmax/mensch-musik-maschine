@@ -33,7 +33,8 @@ class Interface():
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
-        s = ' '.join(table)
+        s = ' '
+        s = s.join(table)
         sys.stdout.write(s)
         sys.stdout.flush()
 
