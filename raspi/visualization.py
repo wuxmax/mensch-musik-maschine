@@ -32,8 +32,8 @@ class Interface():
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
-        # print(tabulate(table))
-
+        sys.stdout.write(tabulate(table))
+        sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
         activations = np.zeros(self.shape)
