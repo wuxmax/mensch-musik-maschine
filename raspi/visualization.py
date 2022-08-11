@@ -21,7 +21,7 @@ class Interface():
         # assert len(names[0]) == horizontal
         
         table = []
-        table.append(f"{a:.0f}" for a in activations)
+        table.append([f"{a:.0f}" for a in activations])
         # for i in range(vertical):
             # add names if any
             # if any(elem is not None for elem in names[i]):
@@ -33,7 +33,7 @@ class Interface():
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
-        s = ' '.join(str(v) for v in table)
+        s = ' '.join(str(f"{v:.0f}") for v in activations)
         sys.stdout.write(s)
         sys.stdout.flush()
 
