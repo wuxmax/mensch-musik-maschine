@@ -23,11 +23,11 @@ class Interface():
         table = []
         for i in range(vertical):
             # add names if any
-            if any(elem is not None for elem in names[i]):
-                table.append([name if name else "-" * self.module_name_spacer for name in names[i]])
+            # if any(elem is not None for elem in names[i]):
+                # table.append([name if name else "-" * self.module_name_spacer for name in names[i]])
             
             # add activations
-            table.append([f"{a:.2f}" for a in activations[i]])
+            table.append([f"{a:.0f}" for a in activations[i]])
 
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()
