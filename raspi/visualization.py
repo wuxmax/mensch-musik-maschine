@@ -15,7 +15,7 @@ class Interface():
         self.module_name_spacer: int = max([len(module.name) for module in self.modules])
 
     def render(self) -> None:
-        return self.quick_and_dirty_for_testing_values()
+        return # self.quick_and_dirty_for_testing_values()
         activations, names = self.get_activations_and_names()
         vertical, horizontal = self.shape
         assert activations.shape[1] == horizontal
