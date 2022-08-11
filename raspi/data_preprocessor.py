@@ -50,7 +50,7 @@ class MatrixDataPreprocessor:
                 if not self.feature_disabled[matrix_idx]:
                     cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
                 else:
-                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.fill((self.n_clusters,), 0.0)
+                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.full((self.n_clusters,), 0.0)
 
             cluster_center_repeats = int(self.recalibration_window / self.n_clusters * self.recalibration_cluster_center_weight)
             values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)], axis=2)
