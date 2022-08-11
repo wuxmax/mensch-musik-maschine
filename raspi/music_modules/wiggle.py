@@ -12,7 +12,8 @@ class Wiggle(MusicModule):
         self.control = sound['control']
         self.max_freq = sound['max_freq'] * self.shape[0] * self.shape[1]
         self.time_step_size = sound['time_step_size']
-        self.delta_t = sound['delta_t'] * 1/sound['time_step_size']
+        self.delta_t_inc = sound['delta_t_inc'] / sound['time_step_size']
+        self.delta_t_dec = sound['delta_t_dec'] / sound['time_step_size']
         self.history = []
         self.timer = time.time()
         self.activation = 0
@@ -45,25 +46,15 @@ class Wiggle(MusicModule):
         self.history = []
 
         print(f"Switches: {switches}")
-        
-        target = 127 * (switches/self.max_freq)
-        
-        if self.activation == target:
-            return self.activation
-        
-        if target > self.activation:
-            increase = target/self.delta_t
-        else:
-            if self.delta_t > 1:
-                increase = (target - self.activation)/(self.delta_t/2)
-            
-        if increase > 0 and increase > target - self.activation or increase < 0 and increase < target - self.activation:
-            increase = target - self.activation
 
-        # print("---")
-        # print(f"Switches: {switches}")
-        # print(f"Target: {target}")
-        # print(f"Old Activation: {self.activation}")
-        # print(f"Increase: {increase}")
-        # print(f"New Activation: {self.activation + increase}")
-        return min(int(self.activation + increase), 127)
+        target = 127 * (switches / self.max_freq)
+
+        if target > self.activation:
+            change = target / self.delta_t_inc
+        else:
+            change = (self.activation - target) / self.delta_t_dec
+
+        if abs(target - self.activation) < change:
+            return target
+
+        return min(int(self.activation + change), 127)

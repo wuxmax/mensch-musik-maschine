@@ -10,22 +10,48 @@ class Hold(MusicModule):
     def __init__(self, setup, sound):
         super().__init__(setup)
         self.control = sound['control']
+        self.type = sound['type']  # simple, wiggle
         self.time_step_size = sound['time_step_size']
+        self.normalization_distance = sound['normalization_distance'] | 10
+        self.normalization_factor = (sound['normalization_factor'] | 2) * self.time_step_size
+        self.delta_t_inc = sound['delta_t_inc'] / sound['time_step_size']
+        self.delta_t_dec = sound['delta_t_dec'] / sound['time_step_size']
+        self.history = []
         self.timer = time.time()
         self.activation = 0
-        self.sensor_activation_buckets = np.zeros(self.shape)
-        self.decay_rate = sound['decay_rate']
 
     def module_process(self, matrix: np.ndarray):
+        self.history.append(matrix)
+
         if time.time() - self.timer > self.time_step_size:
             self.timer += self.time_step_size
-            self.sensor_activation_buckets[matrix > 0] = np.minimum(self.sensor_activation_buckets[matrix > 0] + self.bucket_increase, self.bucket_size)
-            self.sensor_activation_buckets[matrix <= 0] = np.maximum(self.sensor_activation_buckets[matrix <= 0] - self.decay_rate, 0)
-            self.activation = (self.sensor_activation_buckets.sum() / (self.shape[0] * self.shape[1] * self.bucket_size)) * 127
-        
+            self.activation = self.calculate_activation()
+
             return [MidiControlEvent(
                 channel=self.midi_channel,
                 control=self.control,
                 value=self.activation)]
-        
+
         return []
+
+    def calculate_activation(self):
+        print(f"Activation: {self.activation}")
+
+        shadow = 0
+        light = 0
+        for idx, val in enumerate(self.history):
+            light += (self.history[idx] == 1).sum()
+            shadow += (self.history[idx] == 0).sum()
+        self.history = []
+
+        target = 127 * light/(shadow + light)
+
+        if target > self.activation:
+            change = target / self.delta_t_inc
+        else:
+            change = (self.activation - target) / self.delta_t_dec
+
+        if abs(target - self.activation) < change:
+            return target
+
+        return min(int(self.activation + change), 127)
