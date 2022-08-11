@@ -48,8 +48,9 @@ class Interface():
                 for j in range(module_activations.shape[1]):
                     activations[counter] = module_activations[i][j]
                     counter += 1
-        s = ' '.join(str(f"{v:.0f}") for v in activations + infos)
-        sys.stdout.write("\r{0}".format(s))
+        s = ' '.join(str(f"{v:.0f}") for v in activations)
+        t = ' '.join(str(f"{v:.0f}") for v in infos)
+        sys.stdout.write("\r{0}".format(s + t))
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
