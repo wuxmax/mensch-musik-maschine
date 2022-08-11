@@ -10,10 +10,7 @@ class Hold(MusicModule):
     def __init__(self, setup, sound):
         super().__init__(setup)
         self.control = sound['control']
-        self.type = sound['type']  # simple, wiggle
         self.time_step_size = sound['time_step_size']
-        self.normalization_distance = sound['normalization_distance'] | 10
-        self.normalization_factor = (sound['normalization_factor'] | 2) * self.time_step_size
         self.delta_t_inc = sound['delta_t_inc'] / sound['time_step_size']
         self.delta_t_dec = sound['delta_t_dec'] / sound['time_step_size']
         self.history = []
@@ -52,6 +49,6 @@ class Hold(MusicModule):
             change = (self.activation - target) / self.delta_t_dec
 
         if abs(target - self.activation) < change:
-            return target
+            return int(target)
 
         return min(int(self.activation + change), 127)

@@ -1,9 +1,10 @@
+from pathlib import Path
 
 import yaml
 
 
 def load_config(yaml_file: str = 'config.yml'):
-    with open('configs/' + yaml_file, 'r') as stream:
+    with open(Path(__file__).parent / 'configs'/ yaml_file, 'r') as stream:
         try:
             config=yaml.safe_load(stream)
         except yaml.YAMLError as exc:

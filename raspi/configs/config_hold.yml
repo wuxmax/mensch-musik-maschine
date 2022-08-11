@@ -23,7 +23,7 @@ midi_controller:
 midi_note_player:
   n_voices: 1  
 modules:
-  wiggle:
+  hold:
     module: Hold
     setup:
       name: hold
