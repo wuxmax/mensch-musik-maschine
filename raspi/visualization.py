@@ -21,18 +21,19 @@ class Interface():
         # assert len(names[0]) == horizontal
         
         table = []
-        for i in range(vertical):
+        table.append([f"{a:.0f}" for a in activations])
+        # for i in range(vertical):
             # add names if any
             # if any(elem is not None for elem in names[i]):
                 # table.append([name if name else "-" * self.module_name_spacer for name in names[i]])
             
             # add activations
-            table.append([f"{a:.0f}" for a in activations[i]])
+            # table.append([f"{a:.0f}" for a in activations])
 
         # print(tabulate(table), flush=True)
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
-        sys.stdout.write(tabulate(table))
+        sys.stdout.write(table)
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
