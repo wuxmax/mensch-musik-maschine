@@ -33,7 +33,7 @@ class Wiggle(MusicModule):
         return []
 
     def calculate_activation(self):
-        print(f"Wiggle: {self.activation}")
+        # print(f"Wiggle: {self.activation}")
         
         switches = 0
         for idx, val in enumerate(self.history):
