@@ -34,8 +34,7 @@ class Interface():
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
         s = ' '.join(str(f"{v:.0f}") for v in activations)
-        sys.stdout.write(s)
-        sys.stdout.write("\r{s}".format(s))
+        sys.stdout.write("\r{0}".format(s))
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
