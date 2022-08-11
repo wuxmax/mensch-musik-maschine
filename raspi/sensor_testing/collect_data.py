@@ -10,7 +10,7 @@ from i2c_reader import I2CReader
 from utils import load_config
 
 
-N_READINGS = 1000
+N_READINGS = 5000
 
 
 def collect_data(reader: I2CReader):
@@ -29,7 +29,7 @@ def write_file(data):
 
 
 if __name__ == "__main__":
-    config = load_config('../config.yml')
+    config = load_config('config.yml')
     reader = I2CReader(config)
     data = collect_data(reader)
     write_file(data)

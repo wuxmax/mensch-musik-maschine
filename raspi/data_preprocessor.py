@@ -47,7 +47,10 @@ class MatrixDataPreprocessor:
             cluster_centers = np.empty((*self.matrix_shape, self.n_clusters))
             for flat_idx, predictor in enumerate(self.cluster_predictors):
                 matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
-                cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
+                if not self.feature_disabled[matrix_idx]:
+                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
+                else:
+                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.fill((self.n_clusters,), 0.0)
 
             cluster_center_repeats = int(self.recalibration_window / self.n_clusters * self.recalibration_cluster_center_weight)
             values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)], axis=2)
@@ -58,26 +61,28 @@ class MatrixDataPreprocessor:
         self.cluster_label_mapping = {}
         for flat_idx, predictor in enumerate(self.cluster_predictors):
             matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
-            sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
-            
-            # filter out below threshold values -> most probably broken readings
-            non_zero_value_indices = sensor_values > self.error_threshold
-            sensor_values_filtered = sensor_values[non_zero_value_indices]
 
-            if not np.any(sensor_values_filtered):
-              self.feature_disabled[matrix_idx] = 1
-            else:
-                # fit predictor and return labels computed in training
-                cluster_labels_sensor_values = predictor.fit_predict(sensor_values_filtered.reshape(-1, 1))
-
-                # values are computed in the 3rd dimension, store labels in history
-                normalized_values_stacked[matrix_idx[0], matrix_idx[1], non_zero_value_indices] = cluster_labels_sensor_values
+            if not self.feature_disabled[matrix_idx]:
+                sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
                 
-                # create mapping of cluster labels to return values, so cluster labels are ordered by cluster center (low to high)
-                cluster_center_label_tuples = list(zip((float(c) for c in predictor.cluster_centers_), range(self.n_clusters)))
-                cluster_labels_sorted = [t[1] for t in sorted(cluster_center_label_tuples, key=lambda t: t[0])]
-                cluster_label_mapping = {cluster_label: self.return_values[sort_idx] for sort_idx, cluster_label in enumerate(cluster_labels_sorted)}
-                self.cluster_label_mapping[flat_idx] = cluster_label_mapping
+                # filter out below threshold values -> most probably broken readings
+                non_zero_value_indices = sensor_values > self.error_threshold
+                sensor_values_filtered = sensor_values[non_zero_value_indices]
+
+                if not np.any(sensor_values_filtered):
+                    self.feature_disabled[matrix_idx] = 1
+                else:
+                    # fit predictor and return labels computed in training
+                    cluster_labels_sensor_values = predictor.fit_predict(sensor_values_filtered.reshape(-1, 1))
+
+                    # values are computed in the 3rd dimension, store labels in history
+                    normalized_values_stacked[matrix_idx[0], matrix_idx[1], non_zero_value_indices] = cluster_labels_sensor_values
+                    
+                    # create mapping of cluster labels to return values, so cluster labels are ordered by cluster center (low to high)
+                    cluster_center_label_tuples = list(zip((float(c) for c in predictor.cluster_centers_), range(self.n_clusters)))
+                    cluster_labels_sorted = [t[1] for t in sorted(cluster_center_label_tuples, key=lambda t: t[0])]
+                    cluster_label_mapping = {cluster_label: self.return_values[sort_idx] for sort_idx, cluster_label in enumerate(cluster_labels_sorted)}
+                    self.cluster_label_mapping[flat_idx] = cluster_label_mapping
 
         # initial calibration
         if not self.normalized_value_history:

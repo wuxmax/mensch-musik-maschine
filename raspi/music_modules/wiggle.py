@@ -55,6 +55,6 @@ class Wiggle(MusicModule):
             change = (target - 127.) / self.delta_t_dec
 
         if abs(target - self.activation) < change:
-            return target
+            return int(target)
 
         return min(int(self.activation + change), 127)
