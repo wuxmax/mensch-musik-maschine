@@ -34,7 +34,7 @@ class Interface():
         # sys.stdout.flush()
         # os.system('cls' if os.name == 'nt' else 'clear')
         s = ' '
-        s = s.join(table)
+        s = s.join(str(v) for v in table)
         sys.stdout.write(s)
         sys.stdout.flush()
 
