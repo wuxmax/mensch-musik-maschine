@@ -44,9 +44,9 @@ modules:
     setup:
       name: wiggle
       midi_channel: 2
-      top: 0
+      top: 1
       left: 0
-      bottom: 2
+      bottom: 3
       right: 2
     sound: 
       control: 11
@@ -59,10 +59,10 @@ modules:
     setup:
       name: hold
       midi_channel: 2
-      top: 0
-      left: 0
-      bottom: 2
-      right: 2
+      top: 1
+      left: 2
+      bottom: 3
+      right: 4
     sound: 
       control: 15
       time_step_size: 0.25
