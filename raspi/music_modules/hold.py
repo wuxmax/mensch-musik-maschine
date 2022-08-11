@@ -49,7 +49,7 @@ class Hold(MusicModule):
         if target > self.activation:
             change = target / self.delta_t_inc
         else:
-            change = (self.activation - target) / self.delta_t_dec
+            change = (target - 127.) / self.delta_t_dec
 
         if abs(target - self.activation) < change:
             return target
