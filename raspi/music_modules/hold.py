@@ -32,7 +32,7 @@ class Hold(MusicModule):
         return []
 
     def calculate_activation(self):
-        print(f"Activation: {self.activation}")
+        print(f"Hold: {self.activation}")
 
         shadow = 0
         light = 0

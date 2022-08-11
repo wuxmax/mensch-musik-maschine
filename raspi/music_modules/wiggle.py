@@ -33,7 +33,7 @@ class Wiggle(MusicModule):
         return []
 
     def calculate_activation(self):
-        print(f"Activation: {self.activation}")
+        print(f"Wiggle: {self.activation}")
         
         switches = 0
         for idx, val in enumerate(self.history):
@@ -44,8 +44,6 @@ class Wiggle(MusicModule):
                 # switches += ((self.history[idx-1] == 0) & (val > 0)).sum()
                 switches += (self.history[idx-1] != val).sum()
         self.history = []
-
-        print(f"Switches: {switches}")
 
         target = 127 * (switches / self.max_freq)
 
