@@ -15,7 +15,7 @@ class Interface():
         self.module_name_spacer: int = max([len(module.name) for module in self.modules])
 
     def render(self) -> None:
-        return # self.quick_and_dirty_for_testing_values()
+        return self.quick_and_dirty_for_testing_values()
         activations, names = self.get_activations_and_names()
         vertical, horizontal = self.shape
         assert activations.shape[1] == horizontal
@@ -38,15 +38,17 @@ class Interface():
 
     def quick_and_dirty_for_testing_values(self):
         activations = np.zeros(self.shape[0] * self.shape[1])
+        infos = []
         counter = 0
         for module in self.modules:
             # get activation values for sensors in module
             module_activations = module.get_values()
+            infos.append(module.get_info())
             for i in range(module_activations.shape[0]):
                 for j in range(module_activations.shape[1]):
                     activations[counter] = module_activations[i][j]
                     counter += 1
-        s = ' '.join(str(f"{v:.0f}") for v in activations)
+        s = ' '.join(str(f"{v:.0f}") for v in activations + infos)
         sys.stdout.write("\r{0}".format(s))
         sys.stdout.flush()
 

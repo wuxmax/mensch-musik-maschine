@@ -18,6 +18,7 @@ class Wiggle(MusicModule):
         self.timer = time.time()
         self.activation = 0
 
+
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
         

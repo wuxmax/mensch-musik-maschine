@@ -16,6 +16,7 @@ class Hold(MusicModule):
         self.history = []
         self.timer = time.time()
         self.activation = 0
+        self.info = ''
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
@@ -31,8 +32,12 @@ class Hold(MusicModule):
 
         return []
 
+    def get_info(self) -> str:
+        return self.info
+
     def calculate_activation(self):
-        # f"Hold: {self.activation}")
+        # print(f"Hold: {self.activation}")
+        self.info = f"Hold: {self.activation}"
 
         shadow = 0
         light = 0
