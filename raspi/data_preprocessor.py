@@ -60,8 +60,9 @@ class MatrixDataPreprocessor:
        
         self.cluster_label_mapping = {}
         for flat_idx, predictor in enumerate(self.cluster_predictors):
+            matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
+
             if not self.feature_disabled[matrix_idx]:
-                matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
                 sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
                 
                 # filter out below threshold values -> most probably broken readings
