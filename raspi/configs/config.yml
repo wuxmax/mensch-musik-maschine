@@ -24,6 +24,19 @@ midi_controller:
 midi_note_player:
   n_voices: 1  
 modules:
+  fader_decay:
+    module: Decayer
+    setup:
+      name: fader_decay
+      midi_channel: 2
+      top: 0
+      left: 0
+      bottom: 1
+      right: 10
+    sound: 
+      control: 2
+      decay_rate: 0.2
+      decay_delay: 8
   fader:
     module: Fader
     setup:
@@ -39,6 +52,19 @@ modules:
       window_size_move: 3
       window_size_drop: 8
       error_threshold: 0
+  wiggle_decay:
+    module: Decayer
+    setup:
+      name: wiggle_decay
+      midi_channel: 2
+      top: 0
+      left: 0
+      bottom: 1
+      right: 10
+    sound: 
+      control: 4
+      decay_rate: 0.2
+      decay_delay: 8
   wiggle:
     module: Wiggle
     setup:
@@ -54,6 +80,19 @@ modules:
       time_step_size: 0.25
       delta_t_inc: 1
       delta_t_dec: 0.5
+  hold_decay:
+    module: Decayer
+    setup:
+      name: hold_decay
+      midi_channel: 2
+      top: 0
+      left: 0
+      bottom: 1
+      right: 10
+    sound: 
+      control: 3
+      decay_rate: 0.2
+      decay_delay: 10
   hold:
     module: Hold
     setup:
