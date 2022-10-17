@@ -37,14 +37,12 @@ class Hold(MusicModule):
         return self.info
 
     def calculate_activation(self):
-        # print(f"Hold: {self.activation}")
-
         shadow = 0
         light = 0
         for idx, val in enumerate(self.history):
             light += (self.history[idx] == 0).sum()
             shadow += (self.history[idx] == 1).sum()
-        self.info = f"Hold: {shadow}; {light}"
+        # self.info = f"Hold: {shadow}; {light}"
 
 
         target = 127 * light/(shadow + light)
