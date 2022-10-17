@@ -14,7 +14,7 @@ class Decayer(MusicModule):
         self.decay_delay = sound['decay_delay']
 
         self.activation = 0
-        self.activation_timestamp = 0
+        self.activation_timestamp = time.time()
         self.info = ''
         self.old_matrix = []
 
