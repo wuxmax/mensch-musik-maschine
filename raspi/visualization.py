@@ -46,6 +46,9 @@ class Interface():
             infos.append(module.get_info())
             for i in range(module_activations.shape[0]):
                 for j in range(module_activations.shape[1]):
+                    print(counter)
+                    print(i)
+                    print(j)
                     activations[counter] = module_activations[i][j]
                     counter += 1
         s = ' '.join(str(f"{v:.0f}") for v in activations)
