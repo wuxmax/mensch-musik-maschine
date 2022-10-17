@@ -41,10 +41,8 @@ class Interface():
         infos = []
         for module in self.modules:
             # get activation values for sensors in module
-            infos.append(module.get_info())
             activations += ' '.join(str(f"{v:.0f}") for v in module.get_values().flatten()) + f"{module.get_info()} | "
-        t = ' '.join(str(v) for v in infos) + ' '
-        sys.stdout.write("\r{0}".format(activations + ' ' + t))
+        sys.stdout.write("\r{0}".format(activations))
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
