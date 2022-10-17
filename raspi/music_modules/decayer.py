@@ -18,7 +18,7 @@ class Decayer(MusicModule):
         if np.any(matrix):
             self.activation_timestamp = time.time()
         
-        decay_time = time.time() -  self.activation_timestamp - self.decay_delay
+        decay_time = time.time() - self.activation_timestamp - self.decay_delay
         signal_loss = np.clip(decay_time * self.decay_rate, 0, 1)
 
         new_value = 127 * (1 - signal_loss)
