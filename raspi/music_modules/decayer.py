@@ -24,6 +24,8 @@ class Decayer(MusicModule):
         new_value = 127 * (1 - signal_loss)
         if self.activation != new_value:
             self.activation = new_value
+            self.info = f"Hold: {self.activation}"
+
             return [MidiControlEvent(
                 channel=self.midi_channel,
                 control=self.control,
