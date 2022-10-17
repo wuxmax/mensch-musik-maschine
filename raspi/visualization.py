@@ -46,9 +46,8 @@ class Interface():
             infos.append(module.get_info())
             for i in range(module_activations.shape[0]):
                 for j in range(module_activations.shape[1]):
-                    activations.append(module_activations[i][j])
+                    np.append(activations, module_activations[i][j])
                     counter += 1
-            activations.append(' | ')
         s = ' '.join(str(f"{v:.0f}") for v in activations)
         t = ' '.join(str(v) for v in infos) + '     '
         sys.stdout.write("\r{0}".format(s + ' ' + t))
