@@ -22,7 +22,7 @@ class Decayer(MusicModule):
         return self.info
 
     def module_process(self, matrix: np.ndarray):
-        if self.old_matrix and np.any(matrix - self.old_matrix):
+        if self.old_matrix != [] and np.any(matrix - self.old_matrix):
             self.activation_timestamp = time.time()
         self.old_matrix = matrix
         decay_time = time.time() - self.activation_timestamp - self.decay_delay
