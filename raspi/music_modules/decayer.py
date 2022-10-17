@@ -9,10 +9,16 @@ from .base import MusicModule
 class Decayer(MusicModule):
     def __init__(self, setup, sound):
         super().__init__(setup)
+        self.control = sound['control']
         self.decay_rate = sound['decay_rate']
         self.decay_delay = sound['decay_delay']
+
         self.activation = 0
         self.activation_timestamp = None
+        self.info = ''
+
+    def get_info(self) -> str:
+        return self.info
 
     def module_process(self, matrix: np.ndarray):
         if np.any(matrix):
