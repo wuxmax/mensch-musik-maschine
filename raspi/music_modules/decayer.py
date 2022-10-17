@@ -27,7 +27,7 @@ class Decayer(MusicModule):
         decay_time = time.time() - self.activation_timestamp - self.decay_delay
         signal_loss = np.clip(decay_time * self.decay_rate, 0, 1)
 
-        new_value = 127 * (1 - signal_loss)
+        new_value = int(127 * (1 - signal_loss))
         if self.activation != new_value:
             self.activation = new_value
             self.info = f"Hold: {self.activation}"
