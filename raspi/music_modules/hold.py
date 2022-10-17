@@ -24,6 +24,7 @@ class Hold(MusicModule):
         if time.time() - self.timer > self.time_step_size:
             self.timer += self.time_step_size
             self.activation = self.calculate_activation()
+            self.history = []
 
             return [MidiControlEvent(
                 channel=self.midi_channel,
@@ -43,7 +44,6 @@ class Hold(MusicModule):
         for idx, val in enumerate(self.history):
             light += (self.history[idx] == 0).sum()
             shadow += (self.history[idx] == 1).sum()
-        self.history = []
         self.info = f"Hold: {shadow}; {light}"
 
 
