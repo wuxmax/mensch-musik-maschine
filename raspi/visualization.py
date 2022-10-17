@@ -42,7 +42,7 @@ class Interface():
         for module in self.modules:
             # get activation values for sensors in module
             infos.append(module.get_info())
-            activations += ' '.join(str(f"{v:.0f}") for v in module.get_values()) + ' | '
+            activations += ' '.join(str(f"{v:.0f}") for v in module.get_values())
         t = ' '.join(str(v) for v in infos) + ' '
         print(activations)
         sys.stdout.write("\r{0}".format(activations + ' ' + t))
