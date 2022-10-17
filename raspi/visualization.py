@@ -46,6 +46,7 @@ class Interface():
             np.append(activations, module_activations.flatten)
         s = ' '.join(str(f"{v:.0f}") for v in activations)
         t = ' '.join(str(v) for v in infos) + '     '
+        print(activations)
         sys.stdout.write("\r{0}".format(s + ' ' + t))
         sys.stdout.flush()
 
