@@ -9,7 +9,7 @@ i2c_reader:
     [[11, 4], [11, 4]]
   ]
 data_preprocessor:
-  calibration_period: 5000
+  calibration_period: 1000
   recalibration_period: 5000
   recalibration_window: 5000
   # calibration_period: 5
