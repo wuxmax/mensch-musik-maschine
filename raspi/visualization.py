@@ -37,17 +37,15 @@ class Interface():
         sys.stdout.flush()
 
     def quick_and_dirty_for_testing_values(self):
-        activations = np.array([])
+        activations = ''
         infos = []
         for module in self.modules:
             # get activation values for sensors in module
-            module_activations = module.get_values()
             infos.append(module.get_info())
-            np.append(activations, module_activations.flatten)
-        s = ' '.join(str(f"{v:.0f}") for v in activations)
-        t = ' '.join(str(v) for v in infos) + '     '
+            activations += ' '.join(str(f"{v:.0f}") for v in module.get_values()) + ' | '
+        t = ' '.join(str(v) for v in infos) + ' '
         print(activations)
-        sys.stdout.write("\r{0}".format(s + ' ' + t))
+        sys.stdout.write("\r{0}".format(activations + ' ' + t))
         sys.stdout.flush()
 
     def get_activations_and_names(self) -> np.ndarray:
