@@ -27,6 +27,11 @@
 7. If not already done, activate the device by enabling the checkmark
 8. Connnect to the device by clicking on the connect button (red latency bars should appear in the latency display on the left)
 
+## Ableton Midi Setup
+* Changable in Ableton UserConfigurations.txt (https://help.ableton.com/hc/en-us/articles/206240184-Creating-your-own-Control-Surface-script)
+* One Midi Channel per Module
+** Track Volume is on CC1
+** Effect are on CC2+ 
 
 ## Troubleshooting
 * Check if all I2C devices are detected: `i2cdetect -y 1`
