@@ -37,7 +37,7 @@ class Interface():
         sys.stdout.flush()
 
     def quick_and_dirty_for_testing_values(self):
-        activations = np.zeros(self.shape[0] * self.shape[1])
+        activations = np.array([])
         infos = []
         counter = 0
         for module in self.modules:
@@ -46,11 +46,9 @@ class Interface():
             infos.append(module.get_info())
             for i in range(module_activations.shape[0]):
                 for j in range(module_activations.shape[1]):
-                    print(counter)
-                    print(i)
-                    print(j)
-                    activations[counter] = module_activations[i][j]
+                    activations.append(module_activations[i][j])
                     counter += 1
+            activations.append(' | ')
         s = ' '.join(str(f"{v:.0f}") for v in activations)
         t = ' '.join(str(v) for v in infos) + '     '
         sys.stdout.write("\r{0}".format(s + ' ' + t))
