@@ -9,8 +9,8 @@ from i2c_reader import I2CReader
 from utils import load_config, parse_arguments
 
 
-CONFIG_FILE = "config.yml"
-# CONFIG_FILE = "config_wiggle.yml"
+# CONFIG_FILE = "config.yml"
+CONFIG_FILE = "config_test.yml"
 # CONFIG_FILE = "config_fader.yml"
 
 if __name__ == "__main__":
