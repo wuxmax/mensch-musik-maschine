@@ -28,9 +28,9 @@ class Decayer(MusicModule):
         signal_loss = np.clip(decay_time * self.decay_rate, 0, 1)
 
         new_value = int(127 * (1 - signal_loss))
+        self.info = f"time: {time.time()} - timestamp: {self.activation_timestamp} - decay_time: {decay_time}"
         if self.activation != new_value:
             self.activation = new_value
-            self.info = f"time: {time.time()} - timestamp: {self.activation_timestamp} - decay_time: {decay_time}"
 
             return [MidiControlEvent(
                 channel=self.midi_channel,
