@@ -44,7 +44,6 @@ class Interface():
             infos.append(module.get_info())
             activations += ' '.join(str(f"{v:.0f}") for v in module.get_values().flatten())
         t = ' '.join(str(v) for v in infos) + ' '
-        print(activations)
         sys.stdout.write("\r{0}".format(activations + ' ' + t))
         sys.stdout.flush()
 
