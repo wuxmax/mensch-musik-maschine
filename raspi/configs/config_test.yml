@@ -1,0 +1,39 @@
+matrix_shape: 
+  vertical: 2
+  horizontal: 2
+i2c_reader:
+  i2c_device_addresses: [11]
+  n_device_sensors: 6  # 6, 5, 4, 3
+  sensor_matrix: [
+    [[11, 3], [11, 2]],
+    [[11, 4], [11, 4]]
+  ]
+data_preprocessor:
+  calibration_period: 5000
+  recalibration_period: 5000
+  recalibration_window: 5000
+  # calibration_period: 5
+  # recalibration_period: 5
+  # recalibration_window: 5
+  recalibration_cluster_center_weight: 1
+  n_clusters: 2
+  error_threshold: 5
+midi_controller:
+  port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
+midi_note_player:
+  n_voices: 1  
+modules:
+  hold:
+    module: Hold
+    setup:
+      name: hold
+      midi_channel: 2
+      top: 0
+      left: 0
+      bottom: 2
+      right: 2
+    sound: 
+      control: 11
+      time_step_size: 0.25
+      delta_t_inc: 3
+      delta_t_dec: 0
