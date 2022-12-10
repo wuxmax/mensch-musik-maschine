@@ -10,7 +10,8 @@ from utils import load_config, parse_arguments
 
 
 # CONFIG_FILE = "config.yml"
-CONFIG_FILE = "config_test.yml"
+CONFIG_FILE = "config_real.yml"
+# CONFIG_FILE = "config_test.yml"
 # CONFIG_FILE = "config_fader.yml"
 
 if __name__ == "__main__":

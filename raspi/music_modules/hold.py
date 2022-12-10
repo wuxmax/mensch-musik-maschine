@@ -44,13 +44,13 @@ class Hold(MusicModule):
             shadow += (self.history[idx] == 1).sum()
         # self.info = f"Hold: {shadow}; {light}"
 
-
         target = 127 * light/(shadow + light)
 
         if target > self.activation:
             change = target / self.delta_t_inc
         else:
             change = (target - 127.) / self.delta_t_dec
+            
 
         if abs(target - self.activation) < abs(change):
             return int(target)

@@ -54,6 +54,6 @@ class Wiggle(MusicModule):
             change = (target - 127.) / self.delta_t_dec
 
         if abs(target - self.activation) < abs(change):
-            return int(target)
+            return np.clip(int(target), 0, 127)
 
-        return min(int(self.activation + change), 127)
+        return np.clip(int(self.activation + change), 0, 127)

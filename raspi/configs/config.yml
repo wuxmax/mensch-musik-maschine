@@ -24,47 +24,21 @@ midi_controller:
 midi_note_player:
   n_voices: 1  
 modules:
-  fader_decay:
-    module: Decayer
-    setup:
-      name: fader_decay
-      midi_channel: 2
-      top: 0
-      left: 0
-      bottom: 1
-      right: 10
-    sound: 
-      control: 2
-      decay_rate: 0.2
-      decay_delay: 8
   fader:
     module: Fader
     setup:
       name: fader
-      midi_channel: 2
+      midi_channel: 1
       top: 0
       left: 0
       bottom: 1
       right: 10
     sound: 
-      control_left: 13
-      control_right: 14
+      control_left: 2
+      control_right: 3
       window_size_move: 3
       window_size_drop: 8
       error_threshold: 0
-  wiggle_decay:
-    module: Decayer
-    setup:
-      name: wiggle_decay
-      midi_channel: 2
-      top: 0
-      left: 0
-      bottom: 1
-      right: 10
-    sound: 
-      control: 4
-      decay_rate: 0.2
-      decay_delay: 8
   wiggle:
     module: Wiggle
     setup:
@@ -75,35 +49,68 @@ modules:
       bottom: 3
       right: 2
     sound: 
-      control: 11
+      control: 2
       max_freq: 2
-      time_step_size: 0.25
+      time_step_size: 0.5
       delta_t_inc: 1
       delta_t_dec: 0.5
-  hold_decay:
-    module: Decayer
+  wiggle_a11:
+    module: Wiggle
     setup:
-      name: hold_decay
-      midi_channel: 2
-      top: 0
-      left: 0
-      bottom: 1
-      right: 10
-    sound: 
-      control: 3
-      decay_rate: 0.2
-      decay_delay: 10
-  hold:
-    module: Hold
-    setup:
-      name: hold
-      midi_channel: 2
+      name: wiggle_a11
+      midi_channel: 3
       top: 1
       left: 2
-      bottom: 3
-      right: 4
+      bottom: 1
+      right: 2
     sound: 
-      control: 15
-      time_step_size: 0.25
-      delta_t_inc: 3
-      delta_t_dec: 1
+      control: 2
+      max_freq: 2
+      time_step_size: 0.5
+      delta_t_inc: 1
+      delta_t_dec: 0.5
+  wiggle_a12:
+    module: Wiggle
+    setup:
+      name: wiggle_a12
+      midi_channel: 3
+      top: 2
+      left: 2
+      bottom: 2
+      right: 2
+    sound: 
+      control: 3
+      max_freq: 2
+      time_step_size: 0.5
+      delta_t_inc: 1
+      delta_t_dec: 0.5
+  wiggle_a21:
+    module: Wiggle
+    setup:
+      name: wiggle_a21
+      midi_channel: 3
+      top: 1
+      left: 3
+      bottom: 1
+      right: 3
+    sound: 
+      control: 4
+      max_freq: 2
+      time_step_size: 0.5
+      delta_t_inc: 1
+      delta_t_dec: 0.5
+  wiggle_a22:
+    module: Wiggle
+    setup:
+      name: wiggle_a22
+      midi_channel: 3
+      top: 2
+      left: 3
+      bottom: 2
+      right: 3
+    sound: 
+      control: 5
+      max_freq: 2
+      time_step_size: 0.5
+      delta_t_inc: 1
+      delta_t_dec: 0.5
