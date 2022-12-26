@@ -24,8 +24,8 @@ class Hold(MusicModule):
         if time.time() - self.timer > self.time_step_size:
             events = []
             self.timer += time.time()
-            for i, value in enumerate(self.activation):
-                for j in range(value):
+            for i, array in enumerate(self.activation):
+                for j, _ in enumerate(array):
                     self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])
                     events.append(MidiControlEvent(
                         channel=self.midi_channel,
