@@ -7,7 +7,7 @@ from .base import MusicModule
 
 class SimpleControl(MusicModule):
     def __init__(self, setup, sound):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.control = sound['control']
 
     def module_process(self, matrix: np.ndarray) -> List[MidiControlEvent]:

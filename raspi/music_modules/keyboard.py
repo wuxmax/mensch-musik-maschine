@@ -7,7 +7,7 @@ from module_logger import ModuleLogger
 
 class Keyboard(MusicModule):
     def __init__(self, setup, sound, module_logger: ModuleLogger):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.note_duration = sound['note_duration']
         self.note_mapping: np.ndarray = np.array(sound['note_mapping']).reshape(self.shape[0], self.shape[1])
         

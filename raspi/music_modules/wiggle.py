@@ -9,7 +9,7 @@ from module_logger import ModuleLogger
 
 class Wiggle(MusicModule):
     def __init__(self, setup, sound, module_logger: ModuleLogger):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.control = sound['control']
         self.max_freq = sound['max_freq'] * self.shape[0] * self.shape[1]
         self.time_step_size = sound['time_step_size']

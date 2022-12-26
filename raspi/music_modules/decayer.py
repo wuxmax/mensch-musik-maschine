@@ -9,7 +9,7 @@ from module_logger import ModuleLogger
 
 class Decayer(MusicModule):
     def __init__(self, setup, sound, module_logger: ModuleLogger):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.control = sound['control']
         self.decay_rate = sound['decay_rate']
         self.decay_delay = sound['decay_delay']

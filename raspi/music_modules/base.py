@@ -7,7 +7,7 @@ from module_logger import ModuleLogger
 
 
 class MusicModule(ABC):
-    def __init__(self, setup: dict, sound: dict, module_logger: ModuleLogger):
+    def __init__(self, setup: dict, module_logger: ModuleLogger):
         self.name: str = setup['name']
         self.midi_channel: int = setup['midi_channel']
         self.top: int = setup['top']

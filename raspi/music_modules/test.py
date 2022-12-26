@@ -7,7 +7,7 @@ import numpy as np
 
 class MidiTester(MusicModule):
     def __init__(self, setup, sound):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.control = sound['control']
 
         self.counter = 0

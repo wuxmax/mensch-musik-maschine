@@ -12,7 +12,7 @@ from module_logger import ModuleLogger
 
 class Fader(MusicModule):
     def __init__(self, setup, sound, module_logger: ModuleLogger):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         try:
             assert self.shape[0] == 1
         except AssertionError:

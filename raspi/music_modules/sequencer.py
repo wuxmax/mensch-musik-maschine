@@ -7,7 +7,7 @@ from .base import MusicModule
 
 class Sequencer(MusicModule):
     def __init__(self, setup, sound):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.beat_duration = 60 / sound['bpm']
         self.note_duration = sound['note_duration']
         self.midi_note = sound['midi_note']
@@ -34,7 +34,7 @@ class Sequencer(MusicModule):
 
 class MiniSequencer(MusicModule):
     def __init__(self, setup, sound):
-        super().__init__(setup)
+        super().__init__(setup, module_logger)
         self.beat_duration = 60 / sound['bpm']
         self.note_duration = sound['note_duration']
         self.midi_note = sound['midi_note']
