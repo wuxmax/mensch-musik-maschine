@@ -4,10 +4,11 @@ import numpy as np
 
 from sound_events import MidiControlEvent
 from .base import MusicModule
+from ..module_logger import ModuleLogger
 
 
 class Decayer(MusicModule):
-    def __init__(self, setup, sound):
+    def __init__(self, setup, sound, module_logger: ModuleLogger):
         super().__init__(setup)
         self.control = sound['control']
         self.decay_rate = sound['decay_rate']

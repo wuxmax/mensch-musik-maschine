@@ -4,10 +4,11 @@ import numpy as np
 
 from sound_events import MidiControlEvent
 from .base import MusicModule
+from ..module_logger import ModuleLogger
 
 
 class Hold(MusicModule):
-    def __init__(self, setup, sound):
+    def __init__(self, setup, sound, module_logger: ModuleLogger):
         super().__init__(setup)
         self.control = sound['control']
         self.time_step_size = sound['time_step_size']

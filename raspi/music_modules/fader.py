@@ -7,9 +7,11 @@ from sound_events import MidiControlEvent
 from typing import List
 
 from .base import MusicModule
+from ..module_logger import ModuleLogger
+
 
 class Fader(MusicModule):
-    def __init__(self, setup, sound):
+    def __init__(self, setup, sound, module_logger: ModuleLogger):
         super().__init__(setup)
         try:
             assert self.shape[0] == 1
