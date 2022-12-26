@@ -21,6 +21,7 @@ class Hold(MusicModule):
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
+        self.set_info(np.array(self.activation).flatten())
         if time.time() - self.timer > self.time_step_size:
             events = []
             self.timer += time.time()
