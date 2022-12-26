@@ -99,6 +99,7 @@ async def cluster_borders():
          response_model=List[List[List[float]]])
 async def smallest_values():
     values = value_stack.get_values()
+    print(values)
     return {'smallest_values': [[np.partition((np.array(values)[:, i, j]), config_manager.n_smallest_values())[
                                  :config_manager.n_smallest_values() - 1] for j in range(len(values[0][0]))] for i in
                                 range(len(values[0]))]}
