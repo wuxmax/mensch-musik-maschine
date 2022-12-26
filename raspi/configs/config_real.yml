@@ -21,20 +21,6 @@ midi_controller:
 midi_note_player:
   n_voices: 1
 modules:
-  fader_decay:
-    module: Decayer
-    setup:
-      name: fader_decay
-      midi_channel: 1
-      index: 0
-      top: 0
-      left: 0
-      bottom: 1
-      right: 11
-    sound:
-      control: 1
-      decay_rate: 0.2
-      decay_delay: 8
   fader:
     module: Fader
     setup:
