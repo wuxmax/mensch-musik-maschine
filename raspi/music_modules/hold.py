@@ -24,7 +24,7 @@ class Hold(MusicModule):
         self.set_info(np.array(self.activation).flatten())
         if time.time() - self.timer > self.time_step_size:
             events = []
-            self.timer += time.time()
+            self.timer = time.time()
             for i, array in enumerate(self.activation):
                 for j, _ in enumerate(array):
                     self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])

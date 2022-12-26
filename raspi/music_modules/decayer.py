@@ -19,7 +19,6 @@ class Decayer(MusicModule):
         self.timestamps_needed = 6
         self.old_matrix = []
 
-
     def module_process(self, matrix: np.ndarray):
         if self.old_matrix != [] and np.any(matrix - self.old_matrix):
             self.activation_timestamps.append(time.time())
@@ -34,8 +33,6 @@ class Decayer(MusicModule):
             new_value += int(100 * (1 - signal_loss) / self.timestamps_needed)
         if new_value == 0:
             new_value = 20
-
-        self.set_info('this is working')
 
         if self.activation != new_value:
             self.activation = new_value

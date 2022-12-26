@@ -8,8 +8,6 @@ class ModuleLogger:
         self.logs.append([module, str(log)])
 
     def get_logs(self):
-        print('get log')
-        print(self.logs)
         logs = self.logs
         self.logs = []
         return logs
