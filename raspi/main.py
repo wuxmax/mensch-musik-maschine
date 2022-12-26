@@ -120,7 +120,9 @@ async def calibrate(i2c_address: str = ''):
 
 @app.websocket("/ws/sensor_values")
 async def sensor_values(websocket: WebSocket):
+    print('omg connection')
     await websocket.accept()
+    print('accepted <3')
     while True:
         sleep(0.5)
         print('sending data: ' + websocket.send_json(reader.sensor_values))
