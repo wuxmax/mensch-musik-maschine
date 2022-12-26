@@ -26,7 +26,7 @@ value_stack: ValueStack = ValueStack(config_manager=config_manager)
 module_logger: ModuleLogger = ModuleLogger()
 reader: I2CReader = I2CReader(config_manager, value_stack)
 datpro: MatrixDataPreprocessor = MatrixDataPreprocessor(config_manager, value_stack)
-# matpro: MatrixProcessor = MatrixProcessor(config_manager, printing=True, module_logger=module_logger)
+matpro: MatrixProcessor = MatrixProcessor(config_manager, printing=True, module_logger=module_logger)
 x: threading.Thread
 
 
@@ -38,7 +38,7 @@ def application():
             current_sensor_values = reader.load_sensor_list()
             if not datpro.cluster_borders[0][0] == -1:
                 normalized_values = datpro.normalize(current_sensor_values)
-                # matpro.process(normalized_values)
+                matpro.process(normalized_values)
         datpro.calibrate()
 
     while True:
@@ -46,15 +46,15 @@ def application():
         for j in range(config_manager.recalibration_period()):
             current_sensor_values = reader.load_sensor_list()
             normalized_values = datpro.normalize(current_sensor_values)
-            # matpro.process(normalized_values)
+            matpro.process(normalized_values)
         datpro.calibrate()
 
 
 @app.on_event("startup")
 async def startup_event():
     print('Hello')
-    # x = threading.Thread(target=application, args=())
-    # x.start()
+    x = threading.Thread(target=application, args=())
+    x.start()
 
 
 @app.on_event("shutdown")
@@ -99,7 +99,6 @@ async def cluster_borders():
          response_model=List[List[List[float]]])
 async def smallest_values():
     values = value_stack.get_values()
-    print(values)
     return {'smallest_values': [[np.partition((np.array(values)[:, i, j]), config_manager.n_smallest_values())[
                                  :config_manager.n_smallest_values() - 1] for j in range(len(values[0][0]))] for i in
                                 range(len(values[0]))]}
