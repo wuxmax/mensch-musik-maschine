@@ -11,11 +11,10 @@ data_preprocessor:
   recalibration_period: 5000
   sensor_matrix: [
     [
-      [ [ 13, 2 ], [ 13, 1 ], [ 13, 5 ], [ 13, 3 ], [ 13, 0 ], [ 13, 4 ], [ 14, 0 ], [ 14, 1 ], [ 14, 2 ], [ 14, 3 ], [ 14, 4 ] ],
-      [ [ 11, 3 ], [ 11, 2 ], [ 15, 3 ], [ 15, 2 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ] ],
-      [ [ 11, 4 ], [ 11, 5 ], [ 15, 4 ], [ 15, 5 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ], [ 11, 0 ] ]
+      [ [ 13, 2 ], [ 13, 1 ], [ 13, 5 ], [ 13, 3 ], [ 13, 0 ], [ 13, 4 ], [ 14, 0 ], [ 14, 1 ], [ 14, 2 ], [ 14, 3 ], [ 14, 4 ] ]
     ],
     [ [ [ 11, 3 ], [ 11, 2 ] ], [ [ 11, 4 ], [ 11, 5 ] ] ],
+    [ [ [ 15, 3 ], [ 15, 2 ] ], [ [ 15, 4 ], [ 15, 5 ] ] ]
   ]
 midi_controller:
   port: 'Virtual Raw MIDI 2-0:VirMIDI 2-0 24:0'
@@ -80,127 +79,127 @@ modules:
   #     time_step_size: 0.25
   #     delta_t_inc: 1
   #     delta_t_dec: 0.5
-  hold_a11:
-     module: Hold
-     setup:
-       name: hold_a11
-       midi_channel: 3
-
-       index: 1
-       top: 1
-       left: 2
-       bottom: 2
-       right: 3
-     sound:
-       control: 1
-       time_step_size: 0.25
-       delta_t_inc: 0.25
-       delta_t_dec: 0.5
-  hold_a12:
-     module: Hold
-     setup:
-       name: hold_a12
-       midi_channel: 4
-
-       index: 1
-       top: 2
-       left: 2
-       bottom: 3
-       right: 3
-     sound:
-       control: 1
-       time_step_size: 0.25
-       delta_t_inc: 0.25
-       delta_t_dec: 0.5
-  hold_a21:
-     module: Hold
-     setup:
-       name: hold_a21
-       midi_channel: 5
-       index: 1
-       top: 1
-       left: 3
-       bottom: 2
-       right: 4
-     sound:
-       control: 1
-       time_step_size: 0.25
-       delta_t_inc: 0.25
-       delta_t_dec: 0.5
-  hold_a22:
-     module: Hold
-     setup:
-       name: hold_a22
-       midi_channel: 6
-       index: 1
-       top: 2
-       left: 3
-       bottom: 3
-       right: 4
-     sound:
-       control: 1
-       time_step_size: 0.25
-       delta_t_inc: 0.25
-       delta_t_dec: 0.5
-
-
-  hold_b11:
-    module: Hold
-    setup:
-      name: hold_b11
-      midi_channel: 3
-      index: 1
-      top: 1
-      left: 0
-      bottom: 2
-      right: 1
-    sound:
-      control: 1
-      time_step_size: 0.25
-      delta_t_inc: 0.25
-      delta_t_dec: 0.5
-  hold_b12:
-    module: Hold
-    setup:
-      name: hold_b12
-      midi_channel: 4
-      index: 1
-      top: 2
-      left: 0
-      bottom: 3
-      right: 1
-    sound:
-      control: 1
-      time_step_size: 0.25
-      delta_t_inc: 0.25
-      delta_t_dec: 0.5
-  hold_b21:
-    module: Hold
-    setup:
-      name: hold_b21
-      midi_channel: 5
-      index: 1
-      top: 1
-      left: 1
-      bottom: 2
-      right: 2
-    sound:
-      control: 1
-      time_step_size: 0.25
-      delta_t_inc: 0.25
-      delta_t_dec: 0.5
-  hold_b22:
-    module: Hold
-    setup:
-      name: hold_b22
-      midi_channel: 6
-      index: 1
-      top: 2
-      left: 1
-      bottom: 3
-      right: 2
-    sound:
-      control: 1
-      time_step_size: 0.25
-      delta_t_inc: 0.25
-      delta_t_dec: 0.5
+#  hold_a11:
+#     module: Hold
+#     setup:
+#       name: hold_a11
+#       midi_channel: 3
+#
+#       index: 1
+#       top: 1
+#       left: 2
+#       bottom: 2
+#       right: 3
+#     sound:
+#       control: 1
+#       time_step_size: 0.25
+#       delta_t_inc: 0.25
+#       delta_t_dec: 0.5
+#  hold_a12:
+#     module: Hold
+#     setup:
+#       name: hold_a12
+#       midi_channel: 4
+#
+#       index: 1
+#       top: 2
+#       left: 2
+#       bottom: 3
+#       right: 3
+#     sound:
+#       control: 1
+#       time_step_size: 0.25
+#       delta_t_inc: 0.25
+#       delta_t_dec: 0.5
+#  hold_a21:
+#     module: Hold
+#     setup:
+#       name: hold_a21
+#       midi_channel: 5
+#       index: 1
+#       top: 1
+#       left: 3
+#       bottom: 2
+#       right: 4
+#     sound:
+#       control: 1
+#       time_step_size: 0.25
+#       delta_t_inc: 0.25
+#       delta_t_dec: 0.5
+#  hold_a22:
+#     module: Hold
+#     setup:
+#       name: hold_a22
+#       midi_channel: 6
+#       index: 1
+#       top: 2
+#       left: 3
+#       bottom: 3
+#       right: 4
+#     sound:
+#       control: 1
+#       time_step_size: 0.25
+#       delta_t_inc: 0.25
+#       delta_t_dec: 0.5
+#
+#
+#  hold_b11:
+#    module: Hold
+#    setup:
+#      name: hold_b11
+#      midi_channel: 3
+#      index: 1
+#      top: 1
+#      left: 0
+#      bottom: 2
+#      right: 1
+#    sound:
+#      control: 1
+#      time_step_size: 0.25
+#      delta_t_inc: 0.25
+#      delta_t_dec: 0.5
+#  hold_b12:
+#    module: Hold
+#    setup:
+#      name: hold_b12
+#      midi_channel: 4
+#      index: 1
+#      top: 2
+#      left: 0
+#      bottom: 3
+#      right: 1
+#    sound:
+#      control: 1
+#      time_step_size: 0.25
+#      delta_t_inc: 0.25
+#      delta_t_dec: 0.5
+#  hold_b21:
+#    module: Hold
+#    setup:
+#      name: hold_b21
+#      midi_channel: 5
+#      index: 1
+#      top: 1
+#      left: 1
+#      bottom: 2
+#      right: 2
+#    sound:
+#      control: 1
+#      time_step_size: 0.25
+#      delta_t_inc: 0.25
+#      delta_t_dec: 0.5
+#  hold_b22:
+#    module: Hold
+#    setup:
+#      name: hold_b22
+#      midi_channel: 6
+#      index: 1
+#      top: 2
+#      left: 1
+#      bottom: 3
+#      right: 2
+#    sound:
+#      control: 1
+#      time_step_size: 0.25
+#      delta_t_inc: 0.25
+#      delta_t_dec: 0.5

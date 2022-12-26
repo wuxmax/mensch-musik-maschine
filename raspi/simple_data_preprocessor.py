@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 from config_manager import ConfigManager
 from value_stack import ValueStack
@@ -39,7 +41,7 @@ class MatrixDataPreprocessor:
         return smallest_values.mean() + self.config_manager.threshold()
 
     def sensor_to_module(self, sensor_array: np.ndarray) -> np.ndarray:
-        response = self.config_manager.sensor_matrix().copy()
+        response = copy.deepcopy(self.config_manager.sensor_matrix())
         for module_idx, module in enumerate(self.config_manager.sensor_matrix()):
             for row_idx, row in enumerate(module):
                 for col_idx, (device_addr, sensor_idx) in enumerate(row):
@@ -67,6 +69,9 @@ if __name__=="__main__":
     datpro.calibrate()
     print(vs.init_values)
     print(datpro.normalize([[51, 2, 53, 4, 55, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]]))
+    print('---')
+    a = datpro.sensor_to_module(datpro.normalize([[51, 2, 53, 4, 55, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]]))
+    b = datpro.sensor_to_module(datpro.normalize([[51, 2, 53, 4, 55, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]]))
 
 
 
