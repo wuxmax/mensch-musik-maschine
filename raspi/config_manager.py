@@ -79,6 +79,9 @@ class ConfigManager:
     def threshold(self):
         return self.config['data_preprocessor']['threshold']
 
+    def sensor_matrix(self):
+        return self.config['data_preprocessor']['sensor_matrix']
+
     @staticmethod
     def test_config(config: dict):
         if not config:

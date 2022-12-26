@@ -1,10 +1,6 @@
 import numpy as np
-from tqdm import tqdm
-
-from i2c_reader import I2CReader
 from config_manager import ConfigManager
 from value_stack import ValueStack
-from utils import load_config
 
 
 class MatrixDataPreprocessor:
@@ -41,6 +37,14 @@ class MatrixDataPreprocessor:
     def calibrate_sensor(self, array):
         smallest_values = np.partition(array, self.config_manager.n_smallest_values())[:self.config_manager.n_smallest_values() - 1]
         return smallest_values.mean() + self.config_manager.threshold()
+
+    def sensor_to_module(self, sensor_array: np.ndarray) -> np.ndarray:
+        response = self.config_manager.sensor_matrix().copy()
+        for module_idx, module in enumerate(self.config_manager.sensor_matrix()):
+            for row_idx, row in enumerate(module):
+                for col_idx, (device_addr, sensor_idx) in enumerate(row):
+                    response[module_idx][row_idx][col_idx] = sensor_array[self.config_manager.i2c_addresses().index(int(device_addr))][sensor_idx]
+        return response
 
 
 if __name__=="__main__":

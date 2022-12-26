@@ -34,6 +34,7 @@ class I2CReader:
         sensor_list = np.zeros((len(self.config_manager.i2c_addresses()), self.config_manager.n_device_sensors()))
         for idx, i2c_address in enumerate(self.config_manager.i2c_addresses()):
             i2c_device_values = self.read(i2c_address)
+            print(i2c_device_values)
             if i2c_device_values:
                 for sensor_idx in range(self.config_manager.n_device_sensors()):
                     sensor_list[idx][sensor_idx] = i2c_device_values
