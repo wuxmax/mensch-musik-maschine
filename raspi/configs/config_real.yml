@@ -4,11 +4,11 @@ i2c_reader:
   n_device_sensors: 6
 
 data_preprocessor:
-  recalibration_cluster_center_weight: 1
-  n_smallest_values: 10
-  threshold: 0.4
+  recalibration_cluster_center_weight: 8
+  n_smallest_values: 20
+  threshold: 0.3
   recalibration_window: 4000
-  recalibration_period: 5000
+  recalibration_period: 4000
   sensor_matrix: [
     [
       [ [ 13, 2 ], [ 13, 1 ], [ 13, 5 ], [ 13, 3 ], [ 13, 0 ], [ 13, 4 ], [ 14, 0 ], [ 14, 1 ], [ 14, 2 ], [ 14, 3 ], [ 14, 4 ] ]
