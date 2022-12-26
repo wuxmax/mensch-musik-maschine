@@ -126,7 +126,7 @@ async def sensor_values(websocket: WebSocket):
     while True:
         sleep(2)
         print('sending data')
-        await websocket.send_json({'some': 'simple_values'})
+        await websocket.send_text('simple_values')
         await websocket.send_json(reader.sensor_values)
 
 
