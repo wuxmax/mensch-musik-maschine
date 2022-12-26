@@ -22,5 +22,4 @@ class Keyboard(MusicModule):
                         velocity=abs(int(matrix[idx]))
                     )
                 )
-        # print(f"keyboard: {sound_events}")
         return return_list

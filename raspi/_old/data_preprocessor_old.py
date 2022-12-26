@@ -75,12 +75,6 @@ if __name__=="__main__":
 
     datpro = MatrixDataPreprocessor(load_config('config.yml'))
     datpro.calibrate(test_values)
-    print(datpro.normalize(test_array(0, 200)))
-    print(datpro.normalize(test_array(200, 400)))
-    print(datpro.normalize(test_array(500, 550)))
-    print(datpro.normalize(test_array(800, 1000)))
-    print(datpro.normalize(test_array(600, 800)))
-    print(datpro.normalize(test_array(100, 700)))
 
     
     

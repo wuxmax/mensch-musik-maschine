@@ -32,10 +32,6 @@ class Fader(MusicModule):
         position = self.single_shadow_pos(matrix)
         self.position_history.append(position)
 
-        # print(f"{position=}")
-        # print(f"{self.position_history=}")
-        # print(f"{self.fader_side=}")
-
         # wait for position history to be filled
         if not len(self.position_history) == self.window_size_drop:
             return []
@@ -65,22 +61,11 @@ class Fader(MusicModule):
         else:
             midi_value = self.get_midi_value(self.shape[1] - position)  # reversed because of direction
             return_values = self.get_return_values(midi_value, self.control_right)
-
-        # print(f"{position=}")
-        # print(f"{self.position_history=}")
-        # print(f"{self.fader_side=}")
-        
-        # print(return_values)
-
         return return_values
 
             
     def single_shadow_pos(self, matrix):
         zero_value_indices = np.nonzero(matrix.squeeze() == 0)[0]
-        
-        # print(f"{matrix=}")
-        # print(f"{zero_value_indices=}")
-        # print(f"{zero_value_indices.shape=}")
         
         if not zero_value_indices.shape[0]:
             return None

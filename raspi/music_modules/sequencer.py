@@ -29,7 +29,6 @@ class Sequencer(MusicModule):
                         ]
             self.beats += 1
         
-        # print(f"sequencer: {return_list}")
         return return_list
 
 class MiniSequencer(MusicModule):
@@ -55,5 +54,4 @@ class MiniSequencer(MusicModule):
                         duration=self.note_duration)
                         ]
 
-        # print(f"sequencer: {return_list}")
         return return_list

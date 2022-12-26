@@ -10,7 +10,6 @@ class MatrixDataPreprocessor:
         self.config_manager = config_manager
         self.value_stack = value_stack
         self.cluster_borders = [[-1 for _ in range(self.config_manager.n_device_sensors())] for _ in range(len(self.config_manager.i2c_addresses()))]
-        print(self.cluster_borders)
 
     def normalize(self, matrix: np.ndarray):
         if self.cluster_borders[0][0] == -1:
@@ -25,7 +24,6 @@ class MatrixDataPreprocessor:
     def calibrate(self, i2c_addess: str = ''):
         if i2c_addess:
             index = self.config_manager.i2c_addresses().index(int(i2c_addess))
-            print(index)
             values = self.value_stack.get_values()
             self.cluster_borders = [[self.calibrate_sensor(np.array(values)[:, i, j])
                                     for j in range(len(values[0][0]))] for i in [index]]

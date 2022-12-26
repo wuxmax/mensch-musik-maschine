@@ -27,8 +27,8 @@ class MatrixProcessor:
             self.log_file = 'logs/log_' + datetime.datetime.now().strftime('%d%m%Y-%H:%M:%S') + '.csv'
 
         self.printing = printing
-        if self.printing:
-            self.visualization = Interface(modules=self.modules, config_manager=self.config_manager)
+        # if self.printing:
+            # self.visualization = Interface(modules=self.modules, config_manager=self.config_manager)
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
@@ -48,8 +48,8 @@ class MatrixProcessor:
             if type(sound_event) == sound_events.MidiControlEvent:
                     self.midi_control_changer.set_value(sound_event)
         # render CLI output
-        if self.printing:
-            self.visualization.render()
+        # if self.printing:
+        #     self.visualization.render()
 
         # logging
         if self.logging:
