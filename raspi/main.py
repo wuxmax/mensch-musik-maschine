@@ -132,5 +132,5 @@ async def module_logs(websocket: WebSocket):
     await websocket.accept()
     while True:
         await websocket.receive()
-        print(module_logger.get_logs)
-        await websocket.send_json({'module_logs': module_logger.get_logs})
+        print(module_logger.get_logs())
+        await websocket.send_json({'module_logs': module_logger.get_logs()})
