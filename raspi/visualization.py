@@ -5,7 +5,7 @@ from typing import List, Tuple
 import numpy as np
 from tabulate import tabulate
 
-from raspi.config_manager import ConfigManager
+from config_manager import ConfigManager
 
 
 class Interface:

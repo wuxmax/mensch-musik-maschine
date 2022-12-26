@@ -3,7 +3,7 @@ from abc import ABC
 import numpy as np
 import time
 
-from raspi.module_logger import ModuleLogger
+from module_logger import ModuleLogger
 
 
 class MusicModule(ABC):

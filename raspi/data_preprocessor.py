@@ -1,10 +1,8 @@
 import numpy as np
-from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 from tqdm import tqdm
 
 from i2c_reader import I2CReader
-from raspi.config_manager import ConfigManager
 from utils import load_config
 
 

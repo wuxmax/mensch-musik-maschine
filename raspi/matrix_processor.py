@@ -5,8 +5,8 @@ import numpy as np
 import sound_events
 import midi_controller
 import music_modules
-from raspi.config_manager import ConfigManager
-from raspi.module_logger import ModuleLogger
+from config_manager import ConfigManager
+from module_logger import ModuleLogger
 from visualization import Interface
 
 

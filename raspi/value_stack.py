@@ -1,6 +1,6 @@
 from collections import deque
 import numpy as np
-from raspi.config_manager import ConfigManager
+from config_manager import ConfigManager
 
 
 # manages a stack for the previous sensor values for calibration and recalibration
