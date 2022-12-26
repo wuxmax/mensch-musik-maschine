@@ -5,7 +5,7 @@ class ModuleLogger:
         self.logs = []
 
     def log(self, module, log):
-        self.logs.append([module, log])
+        self.logs.append([module, str(log)])
 
     def get_logs(self):
         print('get log')
