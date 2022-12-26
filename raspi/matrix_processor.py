@@ -38,8 +38,7 @@ class MatrixProcessor:
         
         events = []
         for module in self.modules:
-            print(value_matrix[module.index][module.top:module.bottom][module.left:module.right])
-            events += module.process(np.ndarray(value_matrix[module.index][module.top:module.bottom][module.left:module.right]))
+            events += module.process(np.array(value_matrix[module.index][module.top:module.bottom][module.left:module.right]))
                 
         for sound_event in events:
             # match type(sound_event):
