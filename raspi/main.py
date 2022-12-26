@@ -131,5 +131,5 @@ async def sensor_values(websocket: WebSocket):
 async def module_logs(websocket: WebSocket):
     await websocket.accept()
     while True:
-        sleep(0.5)
-        await websocket.send_json(module_logger.get_logs)
+        await websocket.receive()
+        await websocket.send_json({'module_logs': module_logger.get_logs})

@@ -1,4 +1,5 @@
 import time
+from collections import deque
 
 import numpy as np
 
@@ -12,44 +13,41 @@ class Hold(MusicModule):
         super().__init__(setup, module_logger)
         self.control = sound['control']
         self.time_step_size = sound['time_step_size']
+        self.stack_size = sound['stack_size']
         self.delta_t_inc = sound['delta_t_inc'] / sound['time_step_size']
         self.delta_t_dec = sound['delta_t_dec'] / sound['time_step_size']
-        self.history = []
+        self.history = deque(maxlen=self.stack_size)
         self.timer = time.time()
-        self.activation = 0
+        self.activation = np.zeros([setup['bottom'] - setup['top'], setup['right'] - setup['left']])
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
-
         if time.time() - self.timer > self.time_step_size:
-            self.timer += self.time_step_size
-            self.activation = self.calculate_activation()
-            self.history = []
-
-            return [MidiControlEvent(
-                channel=self.midi_channel,
-                control=self.control,
-                value=self.activation)]
-
+            events = []
+            self.timer += time.time()
+            for i, value in enumerate(self.activation):
+                for j in range(value):
+                    self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])
+                    events.append(MidiControlEvent(
+                        channel=self.midi_channel,
+                        control=i * j + 2,
+                        value=self.activation[i][j]))
+            self.set_info(np.array(self.activation).flatten())
+            return events
         return []
 
-    def calculate_activation(self):
-        shadow = 0
-        light = 0
-        for idx, val in enumerate(self.history):
-            light += (self.history[idx] == 0).sum()
-            shadow += (self.history[idx] == 1).sum()
-
+    def calculate_activation(self, activation, array):
+        light = (array == 0).sum()
+        shadow = (array == 1).sum()
         target = 127 * light/(shadow + light)
 
-        if target > self.activation:
+        if target > activation:
             change = target / self.delta_t_inc
         else:
             change = (target - 127.) / self.delta_t_dec
-            
-        self.set_info('this is working')
 
-        if abs(target - self.activation) < abs(change):
+
+        if abs(target - activation) < abs(change):
             return int(target)
 
-        return min(int(self.activation + change), 127)
+        return min(int(activation + change), 127)
