@@ -30,7 +30,7 @@ modules:
       top: 0
       left: 0
       bottom: 1
-      right: 10
+      right: 11
     sound:
       control: 1
       decay_rate: 0.2
@@ -44,7 +44,7 @@ modules:
       top: 0
       left: 0
       bottom: 1
-      right: 10
+      right: 11
     sound:
       control_left: 2
       control_right: 3
