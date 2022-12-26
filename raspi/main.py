@@ -127,7 +127,7 @@ async def sensor_values(websocket: WebSocket):
         sleep(2)
         print('sending data')
         await websocket.send_text('simple_values')
-        await websocket.send_json(reader.sensor_values)
+        print('data send')
 
 
 @app.websocket("/ws/module_logs")
