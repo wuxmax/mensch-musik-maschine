@@ -123,10 +123,10 @@ async def sensor_values(websocket: WebSocket):
     print('omg connection')
     await websocket.accept()
     print('accepted <3')
+    data = await websocket.receive_text()
     while True:
         sleep(2)
         print('sending data')
-        data = await websocket.receive_text()
         print(data)
         await websocket.send_json(reader.sensor_values)
         print('data send')
