@@ -124,10 +124,10 @@ async def sensor_values(websocket: WebSocket):
     await websocket.accept()
     print('accepted <3')
     while True:
-        sleep(0.5)
+        sleep(2)
         print('sending data')
-        await websocket.send_json(json.dumps({'some': 'simple_values'}))
-        await websocket.send_json(json.dumps(reader.sensor_values))
+        await websocket.send_json({'some': 'simple_values'})
+        await websocket.send_json(reader.sensor_values)
 
 
 @app.websocket("/ws/module_logs")
