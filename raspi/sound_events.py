@@ -35,4 +35,4 @@ class MidiControlEvent(MidiEvent):
             exit(1)
 
         self.control = control
-        self.value = value    
+        self.value = int(value)
