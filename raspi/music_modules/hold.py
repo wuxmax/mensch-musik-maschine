@@ -11,7 +11,6 @@ from module_logger import ModuleLogger
 class Hold(MusicModule):
     def __init__(self, setup, sound, module_logger: ModuleLogger):
         super().__init__(setup, module_logger)
-        self.control = sound['control']
         self.time_step_size = sound['time_step_size']
         self.stack_size = sound['stack_size']
         self.delta_t_inc = sound['delta_t_inc'] / sound['time_step_size']
