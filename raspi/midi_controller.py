@@ -9,7 +9,7 @@ from sound_events import MidiNoteEvent, MidiControlEvent
 
 class MidiController:
     def __init__(self, port: str):
-        self.port = mido.open_output(port) 
+        self.port = mido.open_output(port)
     
 class MidiNotePlayer(MidiController):
     def __init__(self, port: str, n_voices: int):

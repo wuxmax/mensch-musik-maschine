@@ -1,5 +1,9 @@
 # README
 
+## Test Setup
+1. apt-get install libasound2-dev
+2. python3.8 -m pip install -r requirements.txt
+
 ## Raspi Setup
 1. Clone/Pull repo
 2. Start virtual MIDI device: `sudo modprobe snd-virmidi`

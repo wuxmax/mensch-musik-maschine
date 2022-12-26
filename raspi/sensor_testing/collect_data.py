@@ -17,7 +17,7 @@ def collect_data(reader: I2CReader):
     data = {}
     print("Collecting data...")
     for _ in tqdm(range(N_READINGS)):
-        data[datetime.now()] = reader.get_value_matrix()
+        data[datetime.now()] = reader.load_sensor_list()
     print("Finished")
 
     return data

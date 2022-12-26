@@ -5,24 +5,24 @@ from typing import List, Tuple
 import numpy as np
 from tabulate import tabulate
 
+from raspi.config_manager import ConfigManager
 
-class Interface():
+
+class Interface:
     
-    def __init__(self, modules, shape) -> None:
+    def __init__(self, modules, config_manager: ConfigManager) -> None:
         self.modules: List[Tuple] = modules
-        self.shape: Tuple(int, int) = shape
+        self.config_manager = config_manager
+        self.shape: Tuple[int, int] = (len(self.config_manager.i2c_addresses()), self.config_manager.n_device_sensors())
         self.lines: List[int] = []
         self.module_name_spacer: int = max([len(module.name) for module in self.modules])
 
     def render(self) -> None:
         return self.quick_and_dirty_for_testing_values()
         activations, names = self.get_activations_and_names()
-        vertical, horizontal = self.shape
-        assert activations.shape[1] == horizontal
-        assert len(names[0]) == horizontal
         
         table = []
-        for i in range(vertical):
+        for i in range(len(activations)):
             # add names if any
             if any(elem is not None for elem in names[i]):
                 table.append([name if name else "-" * self.module_name_spacer for name in names[i]])

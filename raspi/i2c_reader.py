@@ -1,63 +1,51 @@
 from time import sleep
-from typing import Union
-
+from typing import Union, List, Tuple, Dict
 from smbus2 import SMBus
 import numpy as np
 
+from raspi.config_manager import ConfigManager
+from raspi.value_stack import ValueStack
 from utils import load_config
 
-class I2CReader:    
-    def __init__(self, config: dict):
-        self.smbus = SMBus(1)
-        self.i2c_addresses: list[int] = config['i2c_reader']['i2c_device_addresses']
-        self.n_device_sensors: int = config['i2c_reader']['n_device_sensors']
-        self.sensor_matrix: list[list[tuple[int, int]]] = config['i2c_reader']['sensor_matrix']
 
-        matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
-        sensor_matrix_shape = (len(self.sensor_matrix), len(self.sensor_matrix[0]))
+class I2CReader:
+    def __init__(self, config_manager: ConfigManager, value_stack: ValueStack):
+        self.config_manager = config_manager
+        self.value_stack = value_stack
         try:
-            assert matrix_shape == sensor_matrix_shape 
-        except:
-            print(f"Matrix shape {matrix_shape} does not equal sensor matrix shape {sensor_matrix_shape}")
-            exit(1)
+            self.smbus = SMBus(1)
+        except PermissionError as e:
+            print('NO I2C CONNECTION POSSIBLE')
 
-        self.sensor_values: dict[int, list[int]] = {i2c_address: [0] * self.n_device_sensors for i2c_address in self.i2c_addresses }
-        self.value_matrix: np.ndarray = np.zeros((len(self.sensor_matrix), (len(self.sensor_matrix[0]))))
+        self.sensor_values: Dict[str, List[int]] = {str(i2c_address): [0] * self.config_manager.n_device_sensors() for
+                                                    i2c_address in self.config_manager.i2c_addresses()}
 
-    def read(self, i2c_address: int) -> Union[list[int], None]:
+    def read(self, i2c_address: int) -> Union[List[int], None]:
         try:
-            block_data = self.smbus.read_i2c_block_data(i2c_address, 0x00, self.n_device_sensors * 2)
+            block_data = self.smbus.read_i2c_block_data(i2c_address, 0x00, self.config_manager.n_device_sensors() * 2)
         except Exception as e:
             # print(f"I2C read exception: {e}")
             return None
 
-        return [int.from_bytes(block_data[idx:idx + 2], byteorder='little', signed=False) for idx in range(0, self.n_device_sensors * 2, 2)]
+        return [int.from_bytes(block_data[idx:idx + 2], byteorder='little', signed=False) for idx in
+                range(0, self.config_manager.n_device_sensors() * 2, 2)]
 
-    def get_value_matrix(self) -> np.ndarray:
-        for i2c_address in self.i2c_addresses:
+    def load_sensor_list(self) -> np.ndarray:
+        sensor_list = np.zeros((len(self.config_manager.i2c_addresses()), self.config_manager.n_device_sensors()))
+        for idx, i2c_address in enumerate(self.config_manager.i2c_addresses()):
             i2c_device_values = self.read(i2c_address)
             if i2c_device_values:
-                for sensor_idx in range(self.n_device_sensors):
-                    self.sensor_values[i2c_address] = i2c_device_values
-        
-        for row_idx, row in enumerate(self.sensor_matrix):
-            for col_idx, (device_addr, sensor_idx) in enumerate(row):
-                sensor_value = self.sensor_values[device_addr][sensor_idx]
-                if sensor_value in range(0, 1024):
-                    self.value_matrix[row_idx, col_idx] = sensor_value
-                
-        return self.value_matrix.copy()
-
+                for sensor_idx in range(self.config_manager.n_device_sensors()):
+                    sensor_list[idx][sensor_idx] = i2c_device_values
+                    self.sensor_values[str(i2c_address)] = i2c_device_values
+        self.value_stack.append(sensor_list)
+        return sensor_list
 
 if __name__ == "__main__":
-    from main import CONFIG_FILE
-    i2c_reader = I2CReader(load_config(CONFIG_FILE))
-    np.set_printoptions(formatter={'float_kind':"{:.1f}".format})
-    
+    cm = ConfigManager(config_name='config_real.yml')
+
+    i2c_reader = I2CReader(cm, ValueStack(config_manager=cm))
+
     while True:
-        print(i2c_reader.get_value_matrix())
-        sleep(1)
-    
-    # while True:
-    #     print(i2c_reader.read(11))
+        print(i2c_reader.load_sensor_list())
 

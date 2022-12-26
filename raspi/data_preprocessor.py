@@ -4,6 +4,7 @@ from sklearn.mixture import GaussianMixture
 from tqdm import tqdm
 
 from i2c_reader import I2CReader
+from raspi.config_manager import ConfigManager
 from utils import load_config
 
 
@@ -22,17 +23,18 @@ class MatrixDataPreprocessor:
         # self.cluster_predictors = [KMeans(n_clusters=self.n_clusters, random_state=0) for _ in range((self.matrix_shape[0] * self.matrix_shape[1]))]
         self.cluster_predictors = [GaussianMixture(n_components=self.n_clusters, random_state=0, warm_start=True)
                                    for _ in range((self.matrix_shape[0] * self.matrix_shape[1]))]
+
         self.cluster_label_mapping = None  # mapping from predicted label to sorted value in return values
-        
+
         self.value_history = None
         self.value_history_stacked = None
         self.normalized_value_history = None
 
-    def calibrate(self, i2c_reader: I2CReader = None, values = None):
+    def calibrate(self, i2c_reader: I2CReader = None, values=None):
         print("Calibrating...")
         if not values and i2c_reader:
             print("Reading values...")
-            values = [i2c_reader.get_value_matrix() for _ in tqdm(range(self.calibration_period))]
+            values = [i2c_reader.load_sensor_list() for _ in tqdm(range(self.config_manager.calibration_period()))]
             print("Reading done!")
         elif not values and not i2c_reader and not self.value_history:
             print("No values or I2C reader given and value history empty! Need values to calibrate.")
@@ -42,11 +44,12 @@ class MatrixDataPreprocessor:
             self.value_history_stacked = np.stack(values, axis=2)
             values_stacked = self.value_history_stacked
         else:  # recalibration
-            self.value_history_stacked = np.concatenate([self.value_history_stacked] + [np.stack(self.value_history, axis=2)], axis=2)
-            values_stacked = self.value_history_stacked[:,:,-self.recalibration_window:]
+            self.value_history_stacked = np.concatenate(
+                [self.value_history_stacked] + [np.stack(self.value_history, axis=2)], axis=2)
+            values_stacked = self.value_history_stacked[:, :, -self.config_manager.recalibration_window():]
 
             # add cluster centers proportionally to values_stacked
-            cluster_centers = np.empty((*self.matrix_shape, self.n_clusters))
+            cluster_centers = np.empty((*self.matrix_shape, self.config_manager.n_clusters()))
             for flat_idx, predictor in enumerate(self.cluster_predictors):
                 matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
                 if not self.feature_disabled[matrix_idx]:
@@ -55,19 +58,26 @@ class MatrixDataPreprocessor:
                 else:
                     cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.full((self.n_clusters,), 0.0)
 
-            cluster_center_repeats = int(self.recalibration_window / self.n_clusters * self.recalibration_cluster_center_weight)
-            values_stacked = np.concatenate([values_stacked, np.repeat(cluster_centers, cluster_center_repeats , axis=2)], axis=2)
+            cluster_center_repeats = int(
+                self.config_manager.recalibration_window() / self.config_manager.n_clusters() * self.config_manager.recalibration_cluster_center_weight())
+            values_stacked = np.concatenate(
+                [values_stacked, np.repeat(cluster_centers, cluster_center_repeats, axis=2)], axis=2)
 
         # set all normalized values to -1 (error value), so error readings have a value also
         normalized_values_stacked = np.full((*self.matrix_shape, values_stacked.shape[-1]), -1)
-       
+
         self.cluster_label_mapping = {}
         for flat_idx, predictor in enumerate(self.cluster_predictors):
             matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
+            sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
+
+            # filter out below threshold values -> most probably broken readings
+            non_zero_value_indices = sensor_values > self.config_manager.error_threshold()
+            sensor_values_filtered = sensor_values[non_zero_value_indices]
 
             if not self.feature_disabled[matrix_idx]:
                 sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
-                
+
                 # filter out below threshold values -> most probably broken readings
                 non_zero_value_indices = sensor_values > self.error_threshold
                 sensor_values_filtered = sensor_values[non_zero_value_indices]
@@ -80,7 +90,7 @@ class MatrixDataPreprocessor:
 
                     # values are computed in the 3rd dimension, store labels in history
                     normalized_values_stacked[matrix_idx[0], matrix_idx[1], non_zero_value_indices] = cluster_labels_sensor_values
-                    
+
                     # create mapping of cluster labels to return values, so cluster labels are ordered by cluster center (low to high)
                     # cluster_center_label_tuples = list(zip((float(c) for c in predictor.cluster_centers_), range(self.n_clusters)))
                     cluster_center_label_tuples = list(
@@ -92,7 +102,7 @@ class MatrixDataPreprocessor:
         # initial calibration
         if not self.normalized_value_history:
             self.normalized_value_history = np.split(normalized_values_stacked, len(values), axis=2)
-        
+
         self.value_history = []
         print("Calibration done!")
 
@@ -100,25 +110,25 @@ class MatrixDataPreprocessor:
         if self.value_history_stacked is None:
             print("No value history! Needs calibration before normalization.")
             exit(1)
-        
+
         self.value_history.append(matrix)
 
         # periodic recalibration
-        if len(self.value_history) == self.recalibration_period:
+        if len(self.value_history) == self.config_manager.recalibration_period():
             self.calibrate()
-        
+
         normalized_matrix = np.empty(self.matrix_shape)
         for flat_idx, predictor in enumerate(self.cluster_predictors):
             matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
-            
+
             # check if feature was disabled during initial calibration
-            if self.feature_disabled[matrix_idx]:
-                normalized_matrix[matrix_idx] = -1
-                continue
-            
+            # if self.feature_disabled[matrix_idx]:
+            #     normalized_matrix[matrix_idx] = -1
+            #     continue
+
             # check if sensor value was below threshold -> most probably reading error
             sensor_value = matrix[matrix_idx]
-            if sensor_value <= self.error_threshold:
+            if sensor_value <= self.config_manager.error_threshold():
                 normalized_matrix[matrix_idx] = self.get_last_value(matrix_idx)
                 continue
 
@@ -127,11 +137,11 @@ class MatrixDataPreprocessor:
 
         self.normalized_value_history.append(normalized_matrix)
         return normalized_matrix
-    
+
     def get_last_value(self, matrix_idx):
         offset = 0
         last_value = -1
-        
+
         while last_value == -1:
             if self.normalized_value_history and len(self.normalized_value_history) >= offset + 1:
                 last_value = self.normalized_value_history[-(1 + offset)][matrix_idx]
@@ -143,9 +153,8 @@ class MatrixDataPreprocessor:
                 break
 
             offset += 1
-        
-        return last_value
 
+        return last_value
 
 if __name__ == "__main__":
     np.set_printoptions(formatter={'float_kind': "{:.1f}".format})
@@ -153,7 +162,7 @@ if __name__ == "__main__":
 
     def test_array(low, high):
         return np.random.uniform(float(low), float(high), size=datpro.matrix_shape)
-    
+
     test_values = [test_array(100, 300) for _ in range(100)] + [test_array(700, 900) for _ in range(100)]
 
     datpro.calibrate(values=test_values)
@@ -170,6 +179,5 @@ if __name__ == "__main__":
     print("Random state")
     print(datpro.normalize(test_array(100, 900)))
 
-    
-    
-    
+
+
