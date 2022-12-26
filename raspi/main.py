@@ -128,7 +128,7 @@ async def sensor_values(websocket: WebSocket):
         print('sending data')
         data = await websocket.receive_text()
         print(data)
-        await websocket.send_json({'asd': 'simple_values'})
+        await websocket.send_json(reader.sensor_values)
         print('data send')
 
 
