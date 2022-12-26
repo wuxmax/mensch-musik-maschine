@@ -29,7 +29,7 @@ class Hold(MusicModule):
                     self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])
                     events.append(MidiControlEvent(
                         channel=self.midi_channel,
-                        control=i * j + 3,
+                        control=i * j + 4,
                         value=self.activation[i][j]))
             self.set_info(np.array(self.activation).flatten())
             return events
