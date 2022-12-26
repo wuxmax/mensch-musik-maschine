@@ -32,7 +32,7 @@ class MatrixProcessor:
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
-        self.modules.append(module_class(config['setup'], config['sound'], module_logger=self.module_logger))
+        self.modules.append(module_class(config['setup'], config['sound'], self.module_logger))
 
     def process(self, value_matrix: np.ndarray):
         
