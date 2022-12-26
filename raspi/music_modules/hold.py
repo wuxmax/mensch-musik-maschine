@@ -29,7 +29,7 @@ class Hold(MusicModule):
                     self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])
                     events.append(MidiControlEvent(
                         channel=self.midi_channel,
-                        control=((i * j) + 1),
+                        control=((i * j) + 2),
                         value=self.activation[i][j]))
             self.set_info(np.array(self.activation).flatten())
             return events
@@ -44,7 +44,6 @@ class Hold(MusicModule):
             change = target / self.delta_t_inc
         else:
             change = (target - 127.) / self.delta_t_dec
-
 
         if abs(target - activation) < abs(change):
             return int(target)
