@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
 from tqdm import tqdm
 
 from i2c_reader import I2CReader
@@ -7,18 +8,22 @@ from raspi.config_manager import ConfigManager
 from utils import load_config
 
 
-class MatrixDataPreprocessor:
-    def __init__(self, config_manager: ConfigManager):
-        self.config_manager = config_manager
-        self.matrix_shape = (len(self.config_manager.i2c_addresses()), self.config_manager.n_device_sensors())
-        self.sensor_values: dict[int, list[int]] = {i2c_address: [0] * self.config_manager.n_device_sensors() for
-                                                    i2c_address in self.config_manager.i2c_addresses()}
-        # self.feature_disabled = self.sensor_values.copy()  # store if feature was 0 in initial calibration
+class MatrixDataPreprocessor: 
+    def __init__(self, config: dict):
+        self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
+        self.calibration_period = config['data_preprocessor']['calibration_period']
+        self.recalibration_period = config['data_preprocessor']['recalibration_period']
+        self.recalibration_window = config['data_preprocessor']['recalibration_window']
+        self.recalibration_cluster_center_weight = config['data_preprocessor']['recalibration_cluster_center_weight']
+        self.feature_disabled = np.zeros(self.matrix_shape)  # store if feature was 0 in initial calibration
 
-        self.return_values = range(
-            self.config_manager.n_clusters())  # could be more complex, length needs to be n_clusters
-        self.cluster_predictors = [KMeans(n_clusters=self.config_manager.n_clusters(), random_state=0) for _ in
-                                   range((self.matrix_shape[0] * self.matrix_shape[1]))]
+        self.n_clusters = config['data_preprocessor']['n_clusters']
+        self.error_threshold = config['data_preprocessor']['error_threshold']  # values must be greater than this to be considered valid readings
+        self.return_values = range(self.n_clusters)  # could be more complex, length needs to be n_clusters
+        # self.cluster_predictors = [KMeans(n_clusters=self.n_clusters, random_state=0) for _ in range((self.matrix_shape[0] * self.matrix_shape[1]))]
+        self.cluster_predictors = [GaussianMixture(n_components=self.n_clusters, random_state=0, warm_start=True)
+                                   for _ in range((self.matrix_shape[0] * self.matrix_shape[1]))]
+
         self.cluster_label_mapping = None  # mapping from predicted label to sorted value in return values
 
         self.value_history = None
@@ -47,11 +52,11 @@ class MatrixDataPreprocessor:
             cluster_centers = np.empty((*self.matrix_shape, self.config_manager.n_clusters()))
             for flat_idx, predictor in enumerate(self.cluster_predictors):
                 matrix_idx = np.unravel_index(flat_idx, self.matrix_shape)
-                cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.full((self.config_manager.n_clusters(),), 0.0)
-                # if not self.feature_disabled[matrix_idx]:
-                #     cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
-                # else:
-                #     cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.full((self.config_manager.n_clusters(),), 0.0)
+                if not self.feature_disabled[matrix_idx]:
+                    # cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.cluster_centers_)
+                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.squeeze(predictor.means_)
+                else:
+                    cluster_centers[matrix_idx[0], matrix_idx[1], :] = np.full((self.n_clusters,), 0.0)
 
             cluster_center_repeats = int(
                 self.config_manager.recalibration_window() / self.config_manager.n_clusters() * self.config_manager.recalibration_cluster_center_weight())
@@ -70,20 +75,29 @@ class MatrixDataPreprocessor:
             non_zero_value_indices = sensor_values > self.config_manager.error_threshold()
             sensor_values_filtered = sensor_values[non_zero_value_indices]
 
-            # if not np.any(sensor_values_filtered):
-            #   self.feature_disabled[matrix_idx] = 1
-            # else:
-            # fit predictor and return labels computed in training
-            cluster_labels_sensor_values = predictor.fit_predict(sensor_values_filtered.reshape(-1, 1))
+            if not self.feature_disabled[matrix_idx]:
+                sensor_values = values_stacked[matrix_idx[0], matrix_idx[1], :]
 
-            # values are computed in the 3rd dimension, store labels in history
-            normalized_values_stacked[matrix_idx[0], matrix_idx[1], non_zero_value_indices] = cluster_labels_sensor_values
+                # filter out below threshold values -> most probably broken readings
+                non_zero_value_indices = sensor_values > self.error_threshold
+                sensor_values_filtered = sensor_values[non_zero_value_indices]
 
-            # create mapping of cluster labels to return values, so cluster labels are ordered by cluster center (low to high)
-            cluster_center_label_tuples = list(zip((float(c) for c in predictor.cluster_centers_), range(self.config_manager.n_clusters())))
-            cluster_labels_sorted = [t[1] for t in sorted(cluster_center_label_tuples, key=lambda t: t[0])]
-            cluster_label_mapping = {cluster_label: self.return_values[sort_idx] for sort_idx, cluster_label in enumerate(cluster_labels_sorted)}
-            self.cluster_label_mapping[flat_idx] = cluster_label_mapping
+                if not np.any(sensor_values_filtered):
+                    self.feature_disabled[matrix_idx] = 1
+                else:
+                    # fit predictor and return labels computed in training
+                    cluster_labels_sensor_values = predictor.fit_predict(sensor_values_filtered.reshape(-1, 1))
+
+                    # values are computed in the 3rd dimension, store labels in history
+                    normalized_values_stacked[matrix_idx[0], matrix_idx[1], non_zero_value_indices] = cluster_labels_sensor_values
+
+                    # create mapping of cluster labels to return values, so cluster labels are ordered by cluster center (low to high)
+                    # cluster_center_label_tuples = list(zip((float(c) for c in predictor.cluster_centers_), range(self.n_clusters)))
+                    cluster_center_label_tuples = list(
+                        zip((float(c) for c in predictor.means_), range(self.n_clusters)))
+                    cluster_labels_sorted = [t[1] for t in sorted(cluster_center_label_tuples, key=lambda t: t[0])]
+                    cluster_label_mapping = {cluster_label: self.return_values[sort_idx] for sort_idx, cluster_label in enumerate(cluster_labels_sorted)}
+                    self.cluster_label_mapping[flat_idx] = cluster_label_mapping
 
         # initial calibration
         if not self.normalized_value_history:
@@ -91,7 +105,6 @@ class MatrixDataPreprocessor:
 
         self.value_history = []
         print("Calibration done!")
-
 
     def normalize(self, matrix: np.ndarray):
         if self.value_history_stacked is None:
@@ -143,8 +156,8 @@ class MatrixDataPreprocessor:
 
         return last_value
 
-if __name__=="__main__":
-    np.set_printoptions(formatter={'float_kind':"{:.1f}".format})
+if __name__ == "__main__":
+    np.set_printoptions(formatter={'float_kind': "{:.1f}".format})
     datpro = MatrixDataPreprocessor(load_config('config.yml'))
 
     def test_array(low, high):
