@@ -38,7 +38,7 @@ def application():
             current_sensor_values = reader.load_sensor_list()
             if not datpro.cluster_borders[0][0] == -1:
                 normalized_values = datpro.normalize(current_sensor_values)
-                # matpro.process(normalized_values)
+                matpro.process(normalized_values)
         datpro.calibrate()
 
     while True:
@@ -46,7 +46,7 @@ def application():
         for j in range(config_manager.recalibration_period()):
             current_sensor_values = reader.load_sensor_list()
             normalized_values = datpro.normalize(current_sensor_values)
-            # matpro.process(normalized_values)
+            matpro.process(normalized_values)
         datpro.calibrate()
 
 
