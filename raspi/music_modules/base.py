@@ -10,6 +10,7 @@ class MusicModule(ABC):
     def __init__(self, setup: dict, module_logger: ModuleLogger):
         self.name: str = setup['name']
         self.midi_channel: int = setup['midi_channel']
+        self.index = setup['index']
         self.top: int = setup['top']
         self.left: int = setup['left']
         self.bottom: int = setup['bottom']
