@@ -2,8 +2,8 @@ import numpy as np
 from tqdm import tqdm
 
 from i2c_reader import I2CReader
-from raspi.config_manager import ConfigManager
-from raspi.value_stack import ValueStack
+from config_manager import ConfigManager
+from value_stack import ValueStack
 from utils import load_config
 
 

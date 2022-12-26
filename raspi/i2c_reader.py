@@ -3,8 +3,8 @@ from typing import Union, List, Tuple, Dict
 from smbus2 import SMBus
 import numpy as np
 
-from raspi.config_manager import ConfigManager
-from raspi.value_stack import ValueStack
+from config_manager import ConfigManager
+from value_stack import ValueStack
 from utils import load_config
 
 

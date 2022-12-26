@@ -6,13 +6,13 @@ import numpy as np
 
 from fastapi import FastAPI, WebSocket
 
-from raspi.value_stack import ValueStack
+from value_stack import ValueStack
 from simple_data_preprocessor import MatrixDataPreprocessor
 from matrix_processor import MatrixProcessor
 from i2c_reader import I2CReader
-from raspi.config_manager import ConfigManager
-from raspi.models import ConfigOut, SensorsOut, ModulesOut, ConfigIn, SensorValues, ClusterBorders
-from raspi.module_logger import ModuleLogger
+from config_manager import ConfigManager
+from models import ConfigOut, SensorsOut, ModulesOut, ConfigIn, SensorValues, ClusterBorders
+from module_logger import ModuleLogger
 
 # CONFIG_FILE = "config.yml"
 CONFIG_FILE = "config_real.yml"
