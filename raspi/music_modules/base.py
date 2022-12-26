@@ -3,8 +3,11 @@ from abc import ABC
 import numpy as np
 import time
 
+from raspi.module_logger import ModuleLogger
+
+
 class MusicModule(ABC):
-    def __init__(self, setup: dict):
+    def __init__(self, setup: dict, module_logger: ModuleLogger):
         self.name: str = setup['name']
         self.midi_channel: int = setup['midi_channel']
         self.top: int = setup['top']
@@ -13,6 +16,8 @@ class MusicModule(ABC):
         self.right: int = setup['right']
         self.shape = (setup['bottom'] - setup['top'], setup['right'] - setup['left'])
         self.last_matrix: np.ndarray = np.zeros(self.shape)
+        self.module_logger = module_logger
+        self.info = ''
 
     def pre_process(self, matrix: np.ndarray):
         try:
@@ -36,4 +41,8 @@ class MusicModule(ABC):
         return self.last_matrix
 
     def get_info(self) -> str:
-        return ''
+        return self.info
+
+    def set_info(self, log):
+        self.info = log
+        self.module_logger.log(self.name, self.info)

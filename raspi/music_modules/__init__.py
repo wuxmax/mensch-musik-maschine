@@ -7,7 +7,7 @@ from importlib import import_module
 sys.path.append("..")
 
 # iterate through the modules in the current package
-module_dir = Path(__file__).resolve().parent
+module_dir = Path(__file__).resolve().parent.__str__()
 
 for (_, module_name, _) in iter_modules([module_dir]):
     # import the module and iterate through its attributes

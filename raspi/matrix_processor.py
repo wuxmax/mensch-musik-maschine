@@ -5,18 +5,21 @@ import numpy as np
 import sound_events
 import midi_controller
 import music_modules
+from raspi.config_manager import ConfigManager
+from raspi.module_logger import ModuleLogger
 from visualization import Interface
-from utils import load_config
 
 
 class MatrixProcessor:    
-    def __init__(self, config: dict, printing=True, logging=False):
-        self.matrix_shape = (config['matrix_shape']['vertical'], config['matrix_shape']['horizontal'])
-        self.midi_note_player = midi_controller.MidiNotePlayer(**config['midi_controller'], **config['midi_note_player'])
-        self.midi_control_changer = midi_controller.MidiControlChanger(**config['midi_controller'])
+    def __init__(self, config_manager: ConfigManager, module_logger: ModuleLogger, printing=True, logging=False):
+        self.config_manager = config_manager
+        self.module_logger = module_logger
+        self.midi_note_player = midi_controller.MidiNotePlayer(**self.config_manager.midi_controller(),
+                                                               **self.config_manager.midi_note_player())
+        self.midi_control_changer = midi_controller.MidiControlChanger(**self.config_manager.midi_controller())
 
         self.modules = []
-        for module in config['modules'].values():
+        for module in self.config_manager.modules().values():
             self.set_module(module)
 
         self.logging = logging
@@ -25,18 +28,17 @@ class MatrixProcessor:
 
         self.printing = printing
         if self.printing:
-            self.visualization = Interface(modules=self.modules, shape=self.matrix_shape)
+            self.visualization = Interface(modules=self.modules, config_manager=self.config_manager)
 
     def set_module(self, config: dict):
         module_class = getattr(music_modules, config['module'])
-        self.modules.append(module_class(config['setup'], config['sound']))
-        
+        self.modules.append(module_class(config['setup'], config['sound'], module_logger=self.module_logger))
+
     def process(self, value_matrix: np.ndarray):
-        assert value_matrix.shape == self.matrix_shape
         
         events = []
         for module in self.modules:
-            events += module.process(value_matrix[module.top:module.bottom,module.left:module.right])
+            events += module.process(value_matrix[module.index, module.top:module.bottom, module.left:module.right])
                 
         for sound_event in events:
             # match type(sound_event):
@@ -45,7 +47,6 @@ class MatrixProcessor:
                     self.midi_note_player.play_note(sound_event)
             if type(sound_event) == sound_events.MidiControlEvent:
                     self.midi_control_changer.set_value(sound_event)
-                    
         # render CLI output
         if self.printing:
             self.visualization.render()

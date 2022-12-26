@@ -4,6 +4,8 @@ from math import copysign
 import numpy as np
 
 from sound_events import MidiControlEvent
+from typing import List
+
 from .base import MusicModule
 
 class Fader(MusicModule):
@@ -23,9 +25,8 @@ class Fader(MusicModule):
         self.position_history = deque([], maxlen=self.window_size_drop)
         self.last_midi_values = {self.control_left: None, self.control_right: None}
         self.fader_side = None
-    
-    
-    def module_process(self, matrix: np.ndarray) -> list[MidiControlEvent]:
+
+    def module_process(self, matrix: np.ndarray) -> List[MidiControlEvent]:
         position = self.single_shadow_pos(matrix)
         self.position_history.append(position)
 

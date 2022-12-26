@@ -16,11 +16,8 @@ class Decayer(MusicModule):
         self.activation = 0
         self.activation_timestamps = [time.time()]
         self.timestamps_needed = 6
-        self.info = ''
         self.old_matrix = []
 
-    def get_info(self) -> str:
-        return self.info
 
     def module_process(self, matrix: np.ndarray):
         if self.old_matrix != [] and np.any(matrix - self.old_matrix):
@@ -37,8 +34,11 @@ class Decayer(MusicModule):
         if new_value == 0:
             new_value = 20
 
+        self.set_info('this is working')
+
         if self.activation != new_value:
             self.activation = new_value
+
 
             return [MidiControlEvent(
                 channel=self.midi_channel,

@@ -16,7 +16,6 @@ class Hold(MusicModule):
         self.history = []
         self.timer = time.time()
         self.activation = 0
-        self.info = ''
 
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
@@ -33,16 +32,12 @@ class Hold(MusicModule):
 
         return []
 
-    def get_info(self) -> str:
-        return self.info
-
     def calculate_activation(self):
         shadow = 0
         light = 0
         for idx, val in enumerate(self.history):
             light += (self.history[idx] == 0).sum()
             shadow += (self.history[idx] == 1).sum()
-        # self.info = f"Hold: {shadow}; {light}"
 
         target = 127 * light/(shadow + light)
 
@@ -51,6 +46,7 @@ class Hold(MusicModule):
         else:
             change = (target - 127.) / self.delta_t_dec
             
+        self.set_info('this is working')
 
         if abs(target - self.activation) < abs(change):
             return int(target)

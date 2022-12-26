@@ -9,3 +9,6 @@ click
 tqdm
 pandas
 matplotlib
+scikit-learn
+tqdm
+fastapi

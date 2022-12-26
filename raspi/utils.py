@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import yaml
+from typing import List
 
 
 def load_config(yaml_file: str = 'config.yml'):
@@ -13,7 +14,7 @@ def load_config(yaml_file: str = 'config.yml'):
     return config
 
 
-def parse_arguments(args: list[str]) -> bool:
+def parse_arguments(args: List[str]) -> bool:
     if len(args) > 1 and args[1] == 'sleep':
         return True
     return False
