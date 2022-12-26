@@ -6,7 +6,7 @@ i2c_reader:
 data_preprocessor:
   recalibration_cluster_center_weight: 8
   n_smallest_values: 20
-  threshold: 0.3
+  threshold: 0.2
   recalibration_window: 4000
   recalibration_period: 4000
   sensor_matrix: [
