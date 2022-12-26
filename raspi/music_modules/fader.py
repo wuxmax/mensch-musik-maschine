@@ -7,7 +7,7 @@ from sound_events import MidiControlEvent
 from typing import List
 
 from .base import MusicModule
-from ..module_logger import ModuleLogger
+from module_logger import ModuleLogger
 
 
 class Fader(MusicModule):

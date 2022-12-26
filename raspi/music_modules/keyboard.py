@@ -2,7 +2,7 @@ import numpy as np
 
 from sound_events import MidiNoteEvent
 from .base import MusicModule
-from ..module_logger import ModuleLogger
+from module_logger import ModuleLogger
 
 
 class Keyboard(MusicModule):
