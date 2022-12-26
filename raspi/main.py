@@ -26,7 +26,7 @@ value_stack: ValueStack = ValueStack(config_manager=config_manager)
 module_logger: ModuleLogger = ModuleLogger()
 reader: I2CReader = I2CReader(config_manager, value_stack)
 datpro: MatrixDataPreprocessor = MatrixDataPreprocessor(config_manager, value_stack)
-matpro: MatrixProcessor = MatrixProcessor(config_manager, printing=True, module_logger=module_logger)
+matpro: MatrixProcessor = MatrixProcessor(config_manager, module_logger, printing=True)
 x: threading.Thread
 
 
