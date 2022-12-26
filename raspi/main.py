@@ -123,7 +123,8 @@ async def sensor_values(websocket: WebSocket):
     await websocket.accept()
     while True:
         await websocket.receive()
-        await websocket.send_json({'sensor_data': reader.sensor_values})
+        await websocket.send_json({'sensor_data': reader.sensor_values,
+                                   'cluster_borders': datpro.cluster_borders})
 
 
 @app.websocket("/ws/module_logs")
