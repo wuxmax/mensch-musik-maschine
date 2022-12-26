@@ -37,7 +37,7 @@ class I2CReader:
             print(i2c_device_values)
             if i2c_device_values:
                 for sensor_idx in range(self.config_manager.n_device_sensors()):
-                    sensor_list[idx][sensor_idx] = i2c_device_values
+                    sensor_list[idx] = i2c_device_values
                     self.sensor_values[str(i2c_address)] = i2c_device_values
         self.value_stack.append(sensor_list)
         return sensor_list
