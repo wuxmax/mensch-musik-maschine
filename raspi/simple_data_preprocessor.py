@@ -36,7 +36,7 @@ class MatrixDataPreprocessor:
 
     def calibrate_sensor(self, array):
         smallest_values = np.partition(array, self.config_manager.n_smallest_values())[:self.config_manager.n_smallest_values() - 1]
-        return smallest_values.mean() + self.config_manager.threshold()
+        return smallest_values.mean() + (array.mean() / smallest_values.mean()) * self.config_manager.threshold()
 
     def sensor_to_module(self, sensor_array: np.ndarray) -> np.ndarray:
         response = copy.deepcopy(self.config_manager.sensor_matrix())
