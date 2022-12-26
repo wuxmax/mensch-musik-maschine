@@ -11,3 +11,4 @@ matplotlib
 scikit-learn
 tqdm
 fastapi
+uvicorn[standard]

@@ -1,3 +1,4 @@
+import json
 import threading
 from time import sleep
 from typing import List
@@ -122,7 +123,8 @@ async def sensor_values(websocket: WebSocket):
     await websocket.accept()
     while True:
         sleep(0.5)
-        await websocket.send_json(reader.sensor_values)
+        print('sending data: ' + websocket.send_json(reader.sensor_values))
+        await websocket.send_json(json.dumps(reader.sensor_values))
 
 
 @app.websocket("/ws/module_logs")
