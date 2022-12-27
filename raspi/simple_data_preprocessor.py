@@ -35,6 +35,7 @@ class MatrixDataPreprocessor:
             self.value_stack.update_init_values(self.cluster_borders)
 
     def calibrate_sensor(self, array):
+
         smallest_values = np.partition(array, self.config_manager.n_smallest_values())[:self.config_manager.n_smallest_values() - 1]
         if smallest_values.mean() == 0:
             return 0
