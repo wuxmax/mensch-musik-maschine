@@ -14,8 +14,8 @@ class MatrixProcessor:
     def __init__(self, config_manager: ConfigManager, module_logger: ModuleLogger, printing=True, logging=False):
         self.config_manager = config_manager
         self.module_logger = module_logger
-        self.midi_note_player = midi_controller.MidiNotePlayer(**self.config_manager.midi_controller(),
-                                                               **self.config_manager.midi_note_player())
+        # self.midi_note_player = midi_controller.MidiNotePlayer(**self.config_manager.midi_controller(),
+        #                                                        **self.config_manager.midi_note_player())
         self.midi_control_changer = midi_controller.MidiControlChanger(**self.config_manager.midi_controller())
 
         self.modules = []
@@ -43,10 +43,11 @@ class MatrixProcessor:
         for sound_event in events:
             # match type(sound_event):
             #     case MidiNoteEvent:
-            if type(sound_event) == sound_events.MidiNoteEvent:
-                    self.midi_note_player.play_note(sound_event)
+            # if type(sound_event) == sound_events.MidiNoteEvent:
+            #     self.midi_note_player.play_note(sound_event)
             if type(sound_event) == sound_events.MidiControlEvent:
-                    self.midi_control_changer.set_value(sound_event)
+                self.midi_control_changer.set_value(sound_event)
+
         # render CLI output
         # if self.printing:
         #     self.visualization.render()

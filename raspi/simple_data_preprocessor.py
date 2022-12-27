@@ -21,9 +21,9 @@ class MatrixDataPreprocessor:
                 return_matrix[x][y] = 1 if matrix[x][y] > self.cluster_borders[x][y] else 0
         return return_matrix
 
-    def calibrate(self, i2c_addess: str = ''):
-        if i2c_addess:
-            index = self.config_manager.i2c_addresses().index(int(i2c_addess))
+    def calibrate(self, i2c_address: str = ''):
+        if i2c_address:
+            index = self.config_manager.i2c_addresses().index(int(i2c_address))
             values = self.value_stack.get_values()
             self.cluster_borders = [[self.calibrate_sensor(np.array(values)[:, i, j])
                                     for j in range(len(values[0][0]))] for i in [index]]
@@ -50,7 +50,7 @@ class MatrixDataPreprocessor:
         return response
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     cm = ConfigManager(config_name='config_real.yml')
 
     vs = ValueStack(cm)

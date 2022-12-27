@@ -1,10 +1,7 @@
-import json
 import threading
-from time import sleep
 from typing import List
 
 import numpy as np
-
 from fastapi import FastAPI, WebSocket
 
 from value_stack import ValueStack
@@ -31,7 +28,7 @@ matpro: MatrixProcessor = MatrixProcessor(config_manager, module_logger, printin
 x: threading.Thread
 
 
-def application():
+def processing():
     a = [100, 200, 500, 1000, 2000, 2000, 2000, 2000]
     print('Go!')
     for i in a:
@@ -51,8 +48,9 @@ def application():
 
 @app.on_event("startup")
 async def startup_event():
+    global x
     print('Hello')
-    x = threading.Thread(target=application, args=())
+    x = threading.Thread(target=processing, args=())
     x.start()
 
 

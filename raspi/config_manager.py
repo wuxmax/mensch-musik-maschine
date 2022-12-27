@@ -3,7 +3,9 @@ from utils import load_config
 
 class ConfigManager:
 
-    def __init__(self, config: dict = {}, config_name: str = ''):
+    def __init__(self, config: dict = None, config_name: str = ''):
+        if config is None:
+            config = {}
         if self.test_config(config):
             self.config = config
         elif self.test_config(load_config(config_name)):

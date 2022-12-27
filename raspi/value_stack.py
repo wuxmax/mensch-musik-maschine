@@ -1,5 +1,4 @@
 from collections import deque
-import numpy as np
 from config_manager import ConfigManager
 
 
@@ -8,7 +7,8 @@ class ValueStack:
     def __init__(self, config_manager: ConfigManager):
         self.config_manager = config_manager
         self.values = deque(maxlen=config_manager.recalibration_window())
-        self.init_values = [[-1 for _ in range(self.config_manager.n_device_sensors())] for _ in range(len(self.config_manager.i2c_addresses()))]
+        self.init_values = [[-1 for _ in range(self.config_manager.n_device_sensors())]
+                            for _ in range(len(self.config_manager.i2c_addresses()))]
 
     def update_init_values(self, values, index=0):
         if index:
@@ -29,6 +29,7 @@ class ValueStack:
         for _ in range(self.config_manager.recalibration_cluster_center_weight()):
             vals.append(self.init_values)
         return vals
+
 
 if __name__ == "__main__":
     cm = ConfigManager(config_name='config_real.yml')

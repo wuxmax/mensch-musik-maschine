@@ -41,6 +41,7 @@ class I2CReader:
         self.value_stack.append(sensor_list)
         return sensor_list
 
+
 if __name__ == "__main__":
     cm = ConfigManager(config_name='config_real.yml')
 
