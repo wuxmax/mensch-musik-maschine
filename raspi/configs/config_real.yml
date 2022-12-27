@@ -72,11 +72,11 @@ modules:
     setup:
       name: scene_changer
       midi_channel: 4
-      index: 0
+      index: 2
       top: 0
       left: 0
-      bottom: 1
-      right: 1
+      bottom: 2
+      right: 2
     sound:
       control: 2
       scene_time: 2
