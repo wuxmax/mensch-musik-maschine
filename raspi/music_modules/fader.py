@@ -63,6 +63,7 @@ class Fader(MusicModule):
 
         print(f"{position=}")
         print(f"{self.position_history=}")
+        print(list(self.position_history)[:-self.window_size_move])
         print(f"{non_none_positions=}")
 
         midi_value = self.get_midi_value(self.shape[1] - position_mean)
