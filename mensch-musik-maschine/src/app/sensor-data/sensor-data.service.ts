@@ -3,6 +3,7 @@ import {BehaviorSubject, interval} from 'rxjs';
 import {IDatapoint, IModule, ISensor, ISensorData} from "../models";
 import { webSocket } from 'rxjs/webSocket';
 import {HttpClient} from "@angular/common/http";
+import {FrontendConfigService} from "../frontend-config.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class SensorDataService {
   private readonly _currentData = new BehaviorSubject<ISensorData[]>([] as ISensorData[]);
   readonly currentData$ = this._currentData.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private frontendConfigService: FrontendConfigService) { }
 
   public get currentData(): ISensorData[] {
     return this._currentData.getValue();
@@ -38,7 +40,7 @@ export class SensorDataService {
   }
 
   setupDataStream() {
-    const subject = webSocket('ws://172.20.10.7:80/ws/sensor_values');
+    const subject = webSocket('ws://' + this.frontendConfigService.raspberryIp + '/ws/sensor_values');
     const subscription = subject.subscribe({
       next: msg => {
         if (this.currentData.length === 0) {

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {IDatapoint, IModule, IModuleData, IModuleLogEntry, ISensor, ISensorData} from "../models";
+import {IModule, IModuleLogEntry, ISensor} from "../models";
 import {BehaviorSubject, interval} from "rxjs";
 import {webSocket} from "rxjs/webSocket";
+import { FrontendConfigService } from '../frontend-config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ModuleDataService {
   private readonly _moduleLog = new BehaviorSubject<IModuleLogEntry>({} as IModuleLogEntry);
   readonly moduleLog$ = this._moduleLog.asObservable();
 
-  constructor() { }
+  constructor(private frontendConfigService: FrontendConfigService) { }
 
   async setupModuleDataService() {
     await this.loadModules();
@@ -32,11 +33,12 @@ export class ModuleDataService {
       {name: 'hold_1', moduleType: 'Hold', sensors: [
           {name: '11', port: '11', address: '', addressType: 'i2c'} as ISensor]} as IModule,
       {name: 'hold_2', moduleType: 'Hold', sensors: [
-          {name: '15', port: '15', address: '', addressType: 'i2c'} as ISensor]} as IModule];
+          {name: '15', port: '15', address: '', addressType: 'i2c'} as ISensor]} as IModule,
+      {name: 'scene_changer', moduleType: 'SceneChanger', sensors: []} as IModule];
   }
 
   setupModuleLog() {
-    const subject = webSocket('ws://172.20.10.7:80/ws/module_logs');
+    const subject = webSocket('ws://' + this.frontendConfigService.raspberryIp + '/ws/module_logs');
     const subscription = subject.subscribe({
       next: (msg: any) => {
         msg.module_logs.map((log: any) => {

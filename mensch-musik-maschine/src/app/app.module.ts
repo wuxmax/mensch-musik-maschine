@@ -7,10 +7,17 @@ import {SensorDataModule} from "./sensor-data/sensor-data.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SoundModulesModule} from "./sound-modules/sound-modules.module";
 import {HttpClientModule} from "@angular/common/http";
+import { FrontendConfigComponent } from './frontend-config/frontend-config.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FrontendConfigComponent
   ],
   imports: [
     BrowserModule,
@@ -19,6 +26,11 @@ import {HttpClientModule} from "@angular/common/http";
     BrowserAnimationsModule,
     SoundModulesModule,
     HttpClientModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

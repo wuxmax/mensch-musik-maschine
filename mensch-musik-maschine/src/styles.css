@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 .fill-div {
   height: 100%;
   width: 100%;
