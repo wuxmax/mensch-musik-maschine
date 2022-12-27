@@ -38,17 +38,19 @@ export class ModuleDataService {
   }
 
   setupModuleLog() {
-    const subject = webSocket('ws://' + this.frontendConfigService.raspberryIp + '/ws/module_logs');
-    const subscription = subject.subscribe({
-      next: (msg: any) => {
-        msg.module_logs.map((log: any) => {
-          this._moduleLog.next({module: {name: log[0]} as IModule, log: log[1]});
-        })
-      },
-      error: err => console.log(err)
-    });
-    interval(2000).subscribe(() => {
-      subject.next(JSON.stringify({op: 'hello'}));
+    this.frontendConfigService.raspberryIp$.subscribe((ip) => {
+      const subject = webSocket('ws://' + ip + '/ws/module_logs');
+      const subscription = subject.subscribe({
+        next: (msg: any) => {
+          msg.module_logs.map((log: any) => {
+            this._moduleLog.next({module: {name: log[0]} as IModule, log: log[1]});
+          })
+        },
+        error: err => console.log(err)
+      });
+      interval(2000).subscribe(() => {
+        subject.next(JSON.stringify({op: 'hello'}));
+      });
     });
   }
 }

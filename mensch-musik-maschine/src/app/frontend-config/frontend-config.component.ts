@@ -10,7 +10,7 @@ import {FormControl} from "@angular/forms";
 })
 export class FrontendConfigComponent implements OnInit {
   raspberryIp = new FormControl('');
-  options: string[] = ['169.254.16.124', '172.20.10.--'];
+  options: string[] = ['169.254.16.124', '172.20.10.--', '172.20.10.7:80'];
   filteredOptions: Observable<string[]>;
 
 

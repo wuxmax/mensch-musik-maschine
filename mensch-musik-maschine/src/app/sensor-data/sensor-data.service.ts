@@ -40,38 +40,40 @@ export class SensorDataService {
   }
 
   setupDataStream() {
-    const subject = webSocket('ws://' + this.frontendConfigService.raspberryIp + '/ws/sensor_values');
-    const subscription = subject.subscribe({
-      next: msg => {
-        if (this.currentData.length === 0) {
-          this.currentData = Object.keys((msg as any).sensor_data).map((key: string, index: number) => {
-            return {
-              sensor: {
+    this.frontendConfigService.raspberryIp$.subscribe((ip) => {
+      const subject = webSocket('ws://' + ip + '/ws/sensor_values');
+      const subscription = subject.subscribe({
+        next: msg => {
+          if (this.currentData.length === 0) {
+            this.currentData = Object.keys((msg as any).sensor_data).map((key: string, index: number) => {
+              return {
+                sensor: {
+                  name: key
+                } as ISensor,
+                dataPoints: (msg as any).sensor_data[key].map((i: number, indexDatapoint: number) => {
+                  return { totalValue: i, clusterBorder: -1} as IDatapoint;
+                }) as IDatapoint[]
+              } as ISensorData;
+            });
+          } else {
+            Object.keys((msg as any).sensor_data).map((key: string, index: number) => {
+              this.currentData[index].sensor = {
                 name: key
-              } as ISensor,
-            dataPoints: (msg as any).sensor_data[key].map((i: number, indexDatapoint: number) => {
-              return { totalValue: i, clusterBorder: -1} as IDatapoint;
-              }) as IDatapoint[]
-          } as ISensorData;
-          });
-        } else {
-          Object.keys((msg as any).sensor_data).map((key: string, index: number) => {
-            this.currentData[index].sensor = {
-              name: key
-            } as ISensor;
-            (msg as any).sensor_data[key].map((i: number, indexDatapoint: number) => {
-              this.currentData[index].dataPoints[indexDatapoint].totalValue = i;
+              } as ISensor;
+              (msg as any).sensor_data[key].map((i: number, indexDatapoint: number) => {
+                this.currentData[index].dataPoints[indexDatapoint].totalValue = i;
+              });
+              (msg as any).cluster_borders[index].map((i: number, indexDatapoint: number) => {
+                this.currentData[index].dataPoints[indexDatapoint].clusterBorder = Math.round(i);
+              });
             });
-            (msg as any).cluster_borders[index].map((i: number, indexDatapoint: number) => {
-              this.currentData[index].dataPoints[indexDatapoint].clusterBorder = Math.round(i);
-            });
-          });
-        }
-      },
-      error: err => console.log(err)
-    });
-    interval(1000).subscribe(() => {
-      subject.next(JSON.stringify({op: 'hello'}));
+          }
+        },
+        error: err => console.log(err)
+      });
+      interval(1000).subscribe(() => {
+        subject.next(JSON.stringify({op: 'hello'}));
+      });
     });
   }
 
