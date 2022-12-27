@@ -22,7 +22,6 @@ class Hold(MusicModule):
     def module_process(self, matrix: np.ndarray):
         self.history.append(matrix)
         if time.time() - self.timer > self.time_step_size:
-            print('----')
             events = []
             self.timer = time.time()
             for i, array in enumerate(self.activation):
@@ -30,7 +29,7 @@ class Hold(MusicModule):
                     self.activation[i][j] = self.calculate_activation(self.activation[i][j], np.array(self.history)[:, i, j])
                     events.append(MidiControlEvent(
                         channel=self.midi_channel,
-                        control=2 + (i * 2) + (j + 1),  # control_values 4, 5, 6, 7
+                        control=1 + (i * 2) + (j + 1),  # control_values 4, 5, 6, 7
                         value=self.activation[i][j]))
             self.set_info(np.array(self.activation).flatten())
             return events
