@@ -17,7 +17,7 @@ class SceneChanger(MusicModule):
         self.timer = time.time()
 
 
-    def process(self, _):
+    def module_process(self, _):
         if time.time() - self.timer > self.time_step_size:
             return MidiControlEvent(
                 channel=self.midi_channel,
