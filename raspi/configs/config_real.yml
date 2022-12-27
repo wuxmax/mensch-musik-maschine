@@ -32,6 +32,6 @@ modules:
       bottom: 2
       right: 2
     sound:
-      control: 0
+      control: 64
       scene_time: 2
       time_step_size: 5

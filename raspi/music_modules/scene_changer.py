@@ -22,5 +22,5 @@ class SceneChanger(MusicModule):
             return [MidiControlEvent(
                 channel=self.midi_channel,
                 control=self.control,
-                value=1)]
+                value=65)]
         return []
