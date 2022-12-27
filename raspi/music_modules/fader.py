@@ -5,7 +5,7 @@ from math import copysign
 import numpy as np
 
 from sound_events import MidiControlEvent
-from typing import List
+from typing import List, Optional
 
 from .base import MusicModule
 from module_logger import ModuleLogger
@@ -58,10 +58,12 @@ class Fader(MusicModule):
         elif not self.fader_side:
             self.fader_side = 'right'
 
-        print(f"{self.position_history=}")
-        non_none_positions = list(filter(lambda x: x is None, list(self.position_history)[:-self.window_size_move]))
-        print(f"{non_none_positions=}")
+        non_none_positions = list(filter(lambda x: x is not None, list(self.position_history)[:-self.window_size_move]))
         position_mean = np.array(non_none_positions).mean()
+
+        print(f"{position=}")
+        print(f"{self.position_history=}")
+        print(f"{non_none_positions=}")
 
         midi_value = self.get_midi_value(self.shape[1] - position_mean)
         return_value_range_end = self.control_left if self.fader_side == 'left' else self.control_right
@@ -69,7 +71,7 @@ class Fader(MusicModule):
         return self.get_return_values(midi_value, return_value_range_end)
 
     @staticmethod
-    def single_shadow_pos(matrix):
+    def single_shadow_pos(matrix) -> Optional[float]:
         zero_value_indices = np.nonzero(matrix.squeeze() == 0)[0]
 
         # no zero values in the matrix
