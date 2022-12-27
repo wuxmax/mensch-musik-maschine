@@ -1,0 +1,10 @@
+<div class="m-25 grid grid-cols-1 gap-20">
+  <div *ngFor="let sensorData of currentData" class="single-sensor grid">
+    <div style="width: 100px; font-size: x-large">{{sensorData.sensor.name}}</div>
+    <div class="grid grid-cols-8 gap-5" style="min-width: 800px">
+      <div *ngFor="let dataPoint of sensorData.dataPoints" class="data-point">
+        <app-data-point [value]="dataPoint.totalValue" [clusterBorder]="dataPoint.clusterBorder" class="data-point"></app-data-point>
+      </div>
+    </div>
+  </div>
+</div>

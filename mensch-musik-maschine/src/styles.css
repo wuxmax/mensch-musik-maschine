@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fill-div {
+  height: 100%;
+  width: 100%;
+}

@@ -1,0 +1,4 @@
+<button mat-button (click)="toggleBacklog()">Display</button>
+<div *ngIf="display">
+  <div *ngFor="let i of backlog">{{i}}</div>
+</div>

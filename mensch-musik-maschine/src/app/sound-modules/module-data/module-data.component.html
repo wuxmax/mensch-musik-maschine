@@ -1,0 +1,8 @@
+<div style="width: 800px; height: 90vh; padding: 25px; font-size: 25px; overflow: scroll" class="grid grid-cols-2">
+  <div>Name:</div><div> {{module.name}}</div>
+  <div>ModuleType:</div><div> {{module.moduleType}}</div>
+  <div>Used Sensors:</div><div></div>
+  <app-sensor-data [sensors]="module.sensors" class="col-span-2"></app-sensor-data>
+  <div>Log:</div><div></div>
+  <app-module-logger [module]="module"></app-module-logger>
+</div>
