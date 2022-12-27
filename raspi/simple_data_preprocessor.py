@@ -36,7 +36,7 @@ class MatrixDataPreprocessor:
 
     def calibrate_sensor(self, array):
         array = array[array != 0]
-        if len(array) < self.config_manager.n_smallest_values():
+        if len(array) <= self.config_manager.n_smallest_values():
             return 0
         smallest_values = np.partition(array, self.config_manager.n_smallest_values())[:self.config_manager.n_smallest_values() - 1]
         if smallest_values.mean() == 0:
