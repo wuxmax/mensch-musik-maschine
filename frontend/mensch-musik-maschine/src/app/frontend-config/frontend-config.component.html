@@ -1,0 +1,19 @@
+<form class="example-form">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Raspberry Ip</mat-label>
+    <input
+            #input
+            type="text"
+           placeholder="ifconfig..."
+           aria-label="Raspberry Ip"
+           matInput
+           [formControl]="raspberryIp"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <button mat-flat-button (click)="updateRaspberryId()" type="button">Save</button>
+</form>
