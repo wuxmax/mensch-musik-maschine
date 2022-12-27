@@ -1,4 +1,5 @@
 from collections import deque
+from enum import Enum, auto
 from math import copysign
 
 import numpy as np
@@ -30,6 +31,7 @@ class Fader(MusicModule):
 
     def module_process(self, matrix: np.ndarray) -> List[MidiControlEvent]:
         position = self.single_shadow_pos(matrix)
+        self.set_info(position)
         self.position_history.append(position)
 
         # wait for position history to be filled
@@ -42,42 +44,37 @@ class Fader(MusicModule):
             return self.get_return_values(127, self.control_left) + self.get_return_values(0, self.control_right)
             
         # check if all positions in position history are equal (cant slice a deque)
-        if not all_equal([self.position_history[i] for i in range(self.window_size_drop - self.window_size_move, self.window_size_drop)]):
-            return []
+        # if not all_equal([self.position_history[i] for i in range(self.window_size_drop - self.window_size_move,
+        #                                                           self.window_size_drop)]):
+        #     return []
 
         # if there is no single shadow just now, do nothing
         if position is None:
             return []
         
-        # if no last fader, start 'new fader' based on on which half we started
+        # if no last fader, start 'new fader' based on which half we started
         if not self.fader_side and position <= int(self.shape[1] / 2):
             self.fader_side = 'left'
         elif not self.fader_side:
             self.fader_side = 'right'
-    
-        if self.fader_side == 'left':
-            midi_value = self.get_midi_value(self.shape[1] - position)  # reversed because of effect
-            return_values = self.get_return_values(midi_value, self.control_left)
-        else:
-            midi_value = self.get_midi_value(self.shape[1] - position)  # reversed because of direction
-            return_values = self.get_return_values(midi_value, self.control_right)
-        return return_values
 
-            
-    def single_shadow_pos(self, matrix):
+        position_mean = np.array(filter(lambda x: x is not None,
+                                        list(self.position_history)[:-self.window_size_move])).mean()
+
+        midi_value = self.get_midi_value(self.shape[1] - position_mean)
+        return_value_range_end = self.control_left if self.fader_side == 'left' else self.control_right
+
+        return self.get_return_values(midi_value, return_value_range_end)
+
+    @staticmethod
+    def single_shadow_pos(matrix):
         zero_value_indices = np.nonzero(matrix.squeeze() == 0)[0]
-        
+
+        # no zero values in the matrix
         if not zero_value_indices.shape[0]:
             return None
-        
-        if zero_value_indices.shape[0] == 1:
-            return zero_value_indices[0]
 
-        if zero_value_indices.shape[0] > 1 and np.all(np.diff(zero_value_indices) <= 1 + self.error_threshold):
-            return float(zero_value_indices[0] + (zero_value_indices[-1] - zero_value_indices[0]) / 2)
-            
-        return None
-
+        return zero_value_indices.mean()
 
     def get_return_values(self, midi_value, midi_control):
         if not self.last_midi_values[midi_control]:
@@ -92,8 +89,7 @@ class Fader(MusicModule):
             
         self.last_midi_values[midi_control] = midi_value
         return return_events
-     
-     
+
     def get_midi_value(self, position: float) -> int:
         # Figure out how 'wide' each range is
         fader_range_min = 0
