@@ -31,7 +31,6 @@ class Fader(MusicModule):
 
     def module_process(self, matrix: np.ndarray) -> List[MidiControlEvent]:
         position = self.single_shadow_pos(matrix)
-        self.set_info(position)
         self.position_history.append(position)
 
         # wait for position history to be filled
@@ -61,12 +60,13 @@ class Fader(MusicModule):
         non_none_positions = list(filter(lambda x: x is not None, list(self.position_history)[-self.window_size_move:]))
         position_mean = np.array(non_none_positions).mean()
 
-        print(f"{position=}")
-        print(f"{self.position_history=}")
-        print(list(self.position_history)[-self.window_size_move:])
-        print(f"{non_none_positions=}")
+        # print(f"{position=}")
+        # print(f"{self.position_history=}")
+        # print(list(self.position_history)[-self.window_size_move:])
+        # print(f"{non_none_positions=}")
 
         midi_value = self.get_midi_value(self.shape[1] - position_mean)
+        self.set_info(midi_value)
         return_value_range_end = self.control_left if self.fader_side == 'left' else self.control_right
 
         return self.get_return_values(midi_value, return_value_range_end)
