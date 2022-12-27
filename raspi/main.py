@@ -32,23 +32,21 @@ x: threading.Thread
 
 
 def application():
-    a = [100, 200, 500, 1000]
+    a = [100, 200, 500, 1000, 2000, 2000, 2000, 2000]
+    print('Go!')
     for i in a:
-        print('going')
         for j in range(i):
             current_sensor_values = reader.load_sensor_list()
             if not datpro.cluster_borders[0][0] == -1:
                 normalized_values = datpro.sensor_to_module(datpro.normalize(current_sensor_values))
                 matpro.process(normalized_values)
+        print('calibration...')
         datpro.calibrate()
-
+    print('calibration finished')
     while True:
-        print('going')
-        for j in range(config_manager.recalibration_period()):
-            current_sensor_values = reader.load_sensor_list()
-            normalized_values = datpro.sensor_to_module(datpro.normalize(current_sensor_values))
-            matpro.process(normalized_values)
-        datpro.calibrate()
+        current_sensor_values = reader.load_sensor_list()
+        normalized_values = datpro.sensor_to_module(datpro.normalize(current_sensor_values))
+        matpro.process(normalized_values)
 
 
 @app.on_event("startup")
