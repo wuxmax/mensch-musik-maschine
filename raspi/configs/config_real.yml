@@ -79,4 +79,4 @@ modules:
       right: 2
     sound:
       control: 0
-      time_step_size: 30
+      time_step_size: 5
