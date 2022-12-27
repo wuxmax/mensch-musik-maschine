@@ -58,8 +58,9 @@ class Fader(MusicModule):
         elif not self.fader_side:
             self.fader_side = 'right'
 
-        position_mean = np.array(list(filter(lambda x: x is not None,
-                                        list(self.position_history)[:-self.window_size_move]))).mean()
+        non_none_positions = list(filter(lambda x: x is not None, list(self.position_history)[:-self.window_size_move]))
+        print(f"{non_none_positions=}")
+        position_mean = np.array(non_none_positions).mean()
 
         midi_value = self.get_midi_value(self.shape[1] - position_mean)
         return_value_range_end = self.control_left if self.fader_side == 'left' else self.control_right
