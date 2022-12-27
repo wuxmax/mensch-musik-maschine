@@ -19,8 +19,8 @@ class SceneChanger(MusicModule):
     def module_process(self, _):
         if time.time() - self.timer > self.time_step_size:
             self.set_info('next scene')
-            return MidiControlEvent(
+            return [MidiControlEvent(
                 channel=self.midi_channel,
                 control=self.control,
-                value=127)
+                value=127)]
         return []
